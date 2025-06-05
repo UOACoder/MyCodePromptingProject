@@ -1,0 +1,1702 @@
+[
+    {
+        "question_id": "0",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf causes Trune, Trune causes Vork, and Vork causes Lumbo.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 0,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Disease:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.affected = set()\n\n    def infect(self, disease):\n        if disease.name in self.causes:\n            self.affected.add(disease.name)\n            for d in disease.causes:\n                if d not in self.affected:\n                    self.affected.add(d)\n                    disease_obj = Disease(d, disease.causes)\n                    self.affected.update(disease_obj.infect(disease_obj))\n        return self.affected\n\nziklo = Disease(\"Ziklo\", {\"Blaf\"})\nblaf = Disease(\"Blaf\", {\"Trune\"})\ntrune = Disease(\"Trune\", {\"Vork\"})\nvork = Disease(\"Vork\", {\"Lumbo\"})\n\ndef no_ziklo(diseases):\n    diseases[\"Ziklo\"] = None\n    return diseases\n\ndef check_lumbo(diseases):\n    return \"Lumbo\" in diseases[\"Lumbo\"].affected\n\ndiseases = {ziklo.name: ziklo, blaf.name: blaf, trune.name: trune, vork.name: vork}\ndiseases = no_ziklo(diseases)\ndiseases[ziklo.name] = ziklo.infect(ziklo)\n\nif not check_lumbo(diseases):\n    print(\"Lumbo would not occur if not Ziklo.\")\nelse:\n    print(\"Lumbo would occur if not Ziklo.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "200",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, Razz causes Pex, Pex causes Zurn, and Zurn causes Zlim.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 1,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Glent': set(['Razz']),\n    'Razz': set(['Pex']),\n    'Pex': set(['Zurn']),\n    'Zurn': set(['Zlim'])\n}\n\ndef simulate(events, new_events):\n    for event, causes in new_events.items():\n        for cause in causes:\n            if cause in events and not events[cause].occurred:\n                events[cause].occurred = True\n\ndef counterfactual(events, original_event, alternative_event):\n    new_events = {original_event: set(), alternative_event: events[original_event].copy()}\n    simulate(events, new_events)\n    return not events['Zlim'].occurred\n\nevents = {name: Event(name, causes) for name, causes in events.items()}\nevents['Glent'].occurred = True\n\nresult = counterfactual(events, 'Glent', 'not Glent')\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "400",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, Vank causes Scud, Scud causes Wrenk, and Wrenk causes Klep.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 2,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nPraf = Event(\"Praf\", set())\nVank = Event(\"Vank\", {Praf})\nScud = Event(\"Scud\", {Vank})\nWrenk = Event(\"Wrenk\", {Scud})\nKlep = Event(\"Klep\", {Wrenk})\n\ndef simulate(events, initial_events):\n    for event in initial_events:\n        event.occurred = True\n\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                cause.occurred = True\n\ndef counterfactual(events, initial_events):\n    events_copy = events.copy()\n    for event in initial_events:\n        event_to_remove = next((e for e in events_copy if e == event), None)\n        if event_to_remove is not None:\n            events_copy.remove(event_to_remove)\n            event_to_remove.occurred = False\n            simulate(events_copy, {event_to_remove})\n            if not Klep.occurred:\n                return False\n            events_copy.append(event_to_remove)\n            event_to_remove.occurred = True\n    return Klep.occurred\n\nsimulate([Praf, Vank, Scud, Wrenk, Klep], {Praf})\nprint(counterfactual([Praf, Vank, Scud, Wrenk, Klep], {Praf}))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "600",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, Blorn causes Plim, Plim causes Quaz, and Quaz causes Jext.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 3,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = causes if causes else []\n\nclass Graph:\n    def __init__(self):\n        self.events = {}\n\n    def add_event(self, event):\n        self.events[event.name] = event\n        for cause in event.causes:\n            if cause not in self.events:\n                self.add_event(Event(cause))\n            self.events[event.name].causes.append(self.events[cause].name)\n\n    def simulate(self, event):\n        event_occurred = True\n        for cause in self.events[event.name].causes:\n            if not self.events[cause].occurred:\n                event_occurred = False\n                break\n        self.events[event.name].occurred = event_occurred\n        return event_occurred\n\n    def reset(self):\n        for event in self.events.values():\n            event.occurred = False\n\nfizo = Event(\"Fizo\")\nblorn = Event(\"Blorn\")\nplim = Event(\"Plim\")\nquaz = Event(\"Quaz\")\njext = Event(\"Jext\")\n\ngraph = Graph()\ngraph.add_event(fizo)\ngraph.add_event(blorn)\ngraph.add_event(plim)\ngraph.add_event(quaz)\ngraph.add_event(jext)\nfizo.causes.append(blorn.name)\nblorn.causes.append(plim.name)\nplim.causes.append(quaz.name)\nquaz.causes.append(jext.name)\n\ndef would_jext_occur(graph, event):\n    graph.reset()\n    graph.simulate(event)\n    return graph.simulate(jext)\n\nprint(would_jext_occur(graph, fizo))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "800",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, Splee causes Blen, Blen causes Druk, and Druk causes Wrox.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 4,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Nuv\": Event(\"Nuv\", set()),\n            \"Splee\": Event(\"Splee\", {\"Nuv\"}),\n            \"Blen\": Event(\"Blen\", {\"Splee\"}),\n            \"Druk\": Event(\"Druk\", {\"Blen\"}),\n            \"Wrox\": Event(\"Wrox\", {\"Druk\"})\n        }\n\n    def run_sequence(self):\n        for event in self.events.values():\n            if not event.occurred and event.causes:\n                cause = next(iter(event.causes))\n                self.events[cause].occurred = True\n                self.run_sequence()\n                event.occurred = True\n\n    def simulate_counterfactual(self, event_to_remove, event_to_add):\n        original_events = self.events.copy()\n        if event_to_remove in self.events:\n            del self.events[event_to_remove]\n        if event_to_add not in self.events:\n            self.events[event_to_add] = Event(event_to_add, set())\n        self.run_sequence()\n        result = self.events[\"Wrox\"].occurred\n        self.events = original_events\n        return result\n\nworld = World()\nworld.run_sequence()\ncounterfactual_world = world.simulate_counterfactual(\"Nuv\", \"Nuv_counterfactual\")\nprint(world.events[\"Wrox\"].occurred)  # True\nprint(counterfactual_world)  # False",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "1",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf and Ziklo together cause Trune, Trune causes not Vork, and Vork causes Lumbo.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 5,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\ndef create_events(given_info):\n    events = {}\n    for info in given_info.split(\",\"):\n        cause_effect = info.split(\" \")\n        cause, effect = cause_effect[0], cause_effect[2]\n        if \"not\" in cause_effect[1]:\n            event = Event(effect, set([cause[1:]]))\n        else:\n            event = Event(cause, set())\n        events[event.name] = event\n    return events\n\ndef create_relationships(given_info):\n    relationships = []\n    for info in given_info.split(\",\"):\n        cause_effect = info.split(\" \")\n        cause, effect = cause_effect[0], cause_effect[2]\n        relationships.append(Relationship(events[cause], events[effect]))\n    return relationships\n\ndef simulate_scenario(events, relationships, scenario):\n    new_events = events.copy()\n    for event in scenario:\n        if event not in new_events:\n            new_events[event] = Event(event, set())\n        else:\n            new_events[event].causes_not.add(scenario[0])\n    for relationship in relationships:\n        if all(event in new_events for event in relationship.cause):\n            new_events[relationship.effect].causes_not.add(scenario[0])\n    return new_events[\"Lumbo\"].causes_not\n\ndef main():\n    given_info = \"Ziklo causes Blaf, Blaf and Ziklo together cause Trune, Trune causes not Vork, and Vork causes Lumbo.\"\n    events = create_events(given_info)\n    relationships = create_relationships(given_info)\n    scenario = [\"not Ziklo\"]\n    result = simulate_scenario(events, relationships, scenario)\n    print(\"Lumbo would occur\" if \"Lumbo\" not in result else \"Lumbo would not occur\")\n\nif __name__ == \"__main__\":\n    main()",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "201",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, Razz and Glent together cause Pex, Pex causes not Zurn, and Zurn causes Zlim.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 6,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\nglent = Event(\"Glent\", [])\nrazz = Event(\"Razz\", [glent])\npex = Event(\"Pex\", [razz, glent])\nzurn = Event(\"Zurn\", [pex])\nzlim = Event(\"Zlim\", [zurn])\n\nrelations = [\n    Relationship(glent, razz),\n    Relationship(razz, pex),\n    Relationship(pex, zurn),\n    Relationship(zurn, zlim)\n]\n\ndef get_causal_chain(event, visited=None, chain=None):\n    if visited is None:\n        visited = set()\n        chain = []\n    visited.add(event)\n    chain.append(event)\n\n    for relation in relations:\n        if relation.cause == event and relation.effect not in visited:\n            get_causal_chain(relation.effect, visited, chain)\n\n    return chain\n\ndef would_zlim_occur_if_not_glent(event_to_remove):\n    if event_to_remove == glent:\n        return zlim not in get_causal_chain(zurn)\n    else:\n        return False\n\nprint(would_zlim_occur_if_not_glent(glent))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "401",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, Vank and Praf together cause Scud, Scud causes not Wrenk, and Wrenk causes Klep.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 7,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = set(causes_not)\n        self.caused_by = set()\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        cause.caused_by.add(effect)\n        effect.causes_not.discard(cause)\n\nPraf = Event(\"Praf\", set())\nVank = Event(\"Vank\", set())\nScud = Event(\"Scud\", set())\nWrenk = Event(\"Wrenk\", set())\nKlep = Event(\"Klep\", set(Wrenk))\n\nRelationship(Praf, Vank)\nRelationship(Vank, Scud)\nRelationship(Scud, Klep)\nRelationship(Wrenk, Klep)\n\nif not Praf:\n    Vank.causes_not.add(Scud)\n    if not Scud:\n        Klep.caused_by.discard(Klep)\n\nif not Klep.caused_by:\n    return \"Klep would not occur if not Praf instead of Praf.\"\nelse:\n    return \"Klep would still occur if not Praf instead of Praf.\"",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "601",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, Blorn and Fizo together cause Plim, Plim causes not Quaz, and Quaz causes Jext.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 8,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_quaz=False, caused_by_fizo=False, causes_plim=False):\n        self.name = name\n        self.causes_quaz = causes_quaz\n        self.caused_by_fizo = caused_by_fizo\n        self.causes_plim = causes_plim\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Fizo\": Event(\"Fizo\", caused_by_fizo=True, causes_plim=True),\n            \"Blorn\": Event(\"Blorn\", caused_by_fizo=True, causes_plim=True),\n            \"Plim\": Event(\"Plim\", causes_not_quaz=True),\n            \"Quaz\": Event(\"Quaz\", causes_jext=True),\n            \"Jext\": None\n        }\n\n    def run_world(self):\n        self.events[\"Fizo\"].caused_by_fizo = True\n        self.events[\"Fizo\"].causes_plim = True\n        self.events[\"Plim\"].causes_not_quaz = False\n        self.events[\"Blorn\"].caused_by_fizo = True\n        self.events[\"Blorn\"].causes_plim = True\n        self.events[\"Plim\"].causes_not_quaz = False\n        self.events[\"Quaz\"].causes_jext = self.events[\"Plim\"].causes_not_quaz\n\n    def counterfactual(self, event_to_remove):\n        world_copy = World()\n        world_copy_events = world_copy.events\n        for event_name, event in self.events.items():\n            world_copy_events[event_name] = event.copy()\n            if event.name == event_to_remove:\n                world_copy_events[event_name].caused_by_fizo = False\n                world_copy_events[event_name].causes_plim = False\n        world_copy.run_world()\n        return world_copy.events[\"Jext\"].causes_jext\n\nworld = World()\nworld.run_world()\ncounterfactual_jext = world.counterfactual(\"Fizo\")\nif counterfactual_jext:\n    answer = \"Yes, Jext would occur if not Fizo instead of Fizo.\"\nelse:\n    answer = \"No, Jext would not occur if not Fizo instead of Fizo.\"\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "801",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, Splee and Nuv together cause Blen, Blen causes not Druk, and Druk causes Wrox.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 9,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\nNuv = Event(\"Nuv\", [])\nSplee = Event(\"Splee\", [Nuv])\nBlen = Event(\"Blen\", [Splee, Nuv])\nDruk = Event(\"Druk\", [Blen])\nWrox = Event(\"Wrox\", [Druk])\n\nrelations = [\n    Relationship(Nuv, Splee),\n    Relationship(Splee, Blen),\n    Relationship(Blen, not Druk),\n    Relationship(Druk, Wrox)\n]\n\ndef get_events_chain(event, visited=None):\n    if visited is None:\n        visited = set()\n    visited.add(event)\n\n    effects = [rel.effect for rel in relations if rel.cause == event]\n    result = [event] + [get_events_chain(effect, visited) for effect in effects]\n    return result if result else []\n\ndef would_wrox_occur_if_not_nuv(nuv_occurred=True):\n    if not nuv_occurred:\n        if Splee not in get_events_chain(Nuv):\n            return False\n    return Wrox in get_events_chain(Nuv)\n\nprint(would_wrox_occur_if_not_nuv(False))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "2",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes not Blaf, Blaf causes Trune, Trune and Blaf together cause Vork, and Vork causes Lumbo.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 10,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Ziklo\": Event(\"Ziklo\", set()),\n            \"Blaf\": Event(\"Blaf\", set()),\n            \"Trune\": Event(\"Trune\", set()),\n            \"Vork\": Event(\"Vork\", set()),\n            \"Lumbo\": Event(\"Lumbo\", { \"Vork\" })\n        }\n\n    def occur(self, event_name):\n        event = self.events[event_name]\n        event.occurred = True\n        for cause in event.causes:\n            self.events[cause].causes.add(event_name)\n\n    def would_occur(self, event_name):\n        if event_name in self.events:\n            event = self.events[event_name]\n            if not event.occurred and event.causes & self.occurred_events:\n                return True\n        return False\n\n    def occurred_events(self):\n        return set(event.name for event in self.events.values() if event.occurred)\n\nworld = World()\nworld.occur(\"Ziklo\")\noccurring_events = world.occurred_events()\nworld.would_occur(\"Lumbo\")\n\nif world.would_occur(\"Lumbo\"):\n    print(\"Yes, Lumbo would occur if not Ziklo instead of Ziklo.\")\nelse:\n    print(\"No, Lumbo would not occur if not Ziklo instead of Ziklo.\")",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "202",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes not Razz, Razz causes Pex, Pex and Razz together cause Zurn, and Zurn causes Zlim.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 11,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Glent\": Event(\"Glent\", {\"Razz\", \"Pex\"}),\n            \"Razz\": Event(\"Razz\", {\"Pex\", \"Zurn\"}),\n            \"Pex\": Event(\"Pex\", {\"Razz\", \"Zurn\"}),\n            \"Zurn\": Event(\"Zurn\", {\"Razz\", \"Pex\", \"Zlim\"}),\n            \"Zlim\": Event(\"Zlim\", {\"Zurn\"})\n        }\n\n    def simulate(self, event_to_remove, event_to_add=None):\n        event_to_remove_occurred = self.events[event_to_remove].occurred\n        self.events[event_to_remove].occurred = False\n\n        if event_to_add:\n            self.events[event_to_add].occurred = True\n\n        for event in self.events.values():\n            if event.occurred and event not in self.events[event_to_remove].causes:\n                event.occurred = False\n                for cause in event.causes:\n                    self.events[cause].occurred = True\n\n        self.events[event_to_remove].occurred = event_to_remove_occurred\n        return self.events[\"Zlim\"].occurred\n\nworld = World()\nif world.simulate(\"Glent\", None):\n    print(\"Zlim would occur if not Glent instead of Glent.\")\nelse:\n    print(\"Zlim would not occur if not Glent instead of Glent.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "402",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes not Vank, Vank causes Scud, Scud and Vank together cause Wrenk, and Wrenk causes Klep.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 12,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nPraf = Event(\"Praf\", set())\nVank = Event(\"Vank\", {Praf})\nScud = Event(\"Scud\", {Vank})\nWrenk = Event(\"Wrenk\", {Vank, Scud})\nKlep = Event(\"Klep\", {Wrenk})\n\ndef simulate(event, occurred=True):\n    event.occurred = occurred\n    for cause in event.causes:\n        cause.occurred and simulate(cause)\n\ndef would_occur(event):\n    simulate(event, False)\n    return event.occurred\n\nwould_occur(Klep) if not would_occur(Praf) else \"Klep would not occur if not Praf instead of Praf\"",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "602",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes not Blorn, Blorn causes Plim, Plim and Blorn together cause Quaz, and Quaz causes Jext.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 13,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\")\nPlim = Event(\"Plim\")\nQuaz = Event(\"Quaz\")\nJext = Event(\"Jext\")\n\nFizo.causes.add(Blorn)\nBlorn.causes.add(Plim)\nPlim.causes.add(Quaz)\nQuaz.causes.add(Jext)\n\ndef simulate(events):\n    events_order = list(reversed(sorted(events, key=lambda x: len(x.causes))))\n    for event in events_order:\n        if not event.occurred and all([e.occured for e in event.causes]):\n            event.occurred = True\n            for cause in event.causes:\n                if cause in events_order:\n                    events_order.remove(cause)\n\nsimulate([Fizo, Blorn, Plim, Quaz, Jext])\nFizo.occurred = False\nsimulate([Fizo, Blorn, Plim, Quaz, Jext])\n\nif Jext.occurred:\n    answer = \"Yes, Jext would occur if not Fizo\"\nelse:\n    answer = \"No, Jext would not occur if not Fizo\"\n\nprint(answer)",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "802",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes not Splee, Splee causes Blen, Blen and Splee together cause Druk, and Druk causes Wrox.",
+        "true_answer": "yes",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 14,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Entity:\n    def __init__(self, name, causes, affected_by):\n        self.name = name\n        self.causes = set(causes)\n        self.affected_by = set(affected_by)\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\nentities = {\n    \"Nuv\": Entity(\"Nuv\", {}, {\"Splee\"}),\n    \"Splee\": Entity(\"Splee\", {\"Blen\"}, {\"Blen\", \"Druk\"}),\n    \"Blen\": Entity(\"Blen\", {}, {\"Druk\"}),\n    \"Druk\": Entity(\"Druk\", {\"Splee\", \"Blen\"}, {\"Wrox\"})\n}\n\nrelationships = [\n    Relationship(entities[\"Nuv\"], entities[\"Splee\"]),\n    Relationship(entities[\"Splee\"], entities[\"Blen\"]),\n    Relationship(entities[\"Splee\"], entities[\"Druk\"]),\n    Relationship(entities[\"Blen\"], entities[\"Druk\"]),\n    Relationship(entities[\"Druk\"], entities[\"Wrox\"])\n]\n\ndef get_affected_entities(entity, relationships):\n    affected_entities = set()\n    for relationship in relationships:\n        if relationship.cause == entity:\n            affected_entities.update(relationship.effect.affected_by)\n    return affected_entities\n\ndef counterfactual_scenario(entity, entities):\n    return entities[entity] if entity not in entities else None\n\ndef would_wrox_occur(not_nuv):\n    if not_nuv:\n        nuv_entities = entities[\"Nuv\"]\n        nuv_entities.affected_by.discard(\"Splee\")\n    else:\n        nuv_entities = counterfactual_scenario(not_nuv, entities)\n\n    affected_entities = get_affected_entities(nuv_entities, relationships)\n    return \"Wrox\" in affected_entities\n\nprint(would_wrox_occur(False))",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "3",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf causes Trune, Trune causes Vork, and Vork and Ziklo together cause Lumbo.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 15,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nZiklo = Event(\"Ziklo\", [\"Vork\"])\nBlaf = Event(\"Blaf\", [\"Trune\"])\nTrune = Event(\"Trune\", [\"Vork\"])\nVork = Event(\"Vork\", [\"Lumbo\"])\nLumbo = Event(\"Lumbo\", [Ziklo])\n\ndef simulate(events):\n    for event in events:\n        if not event.occurred and event.causes:\n            for cause in event.causes:\n                if cause.occurred:\n                    event.occurred = True\n\ndef counterfactual(events, event_to_remove):\n    new_events = [e for e in events if e != event_to_remove]\n    for e in new_events:\n        e.occurred = False\n    return new_events\n\ndef run_simulation(events):\n    simulate(events)\n    for event in events:\n        if event.name == \"Lumbo\":\n            return event.occurred\n\ndef answer_question(events):\n    counterfactual_events = counterfactual(events, Ziklo)\n    simulate(counterfactual_events)\n    return run_simulation(counterfactual_events)\n\nevents = [Ziklo, Blaf, Trune, Vork, Lumbo]\nprint(answer_question(events))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "203",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, Razz causes Pex, Pex causes Zurn, and Zurn and Glent together cause Zlim.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 16,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            'Glent': Event('Glent', {'Razz'}),\n            'Razz': Event('Razz', {'Pex'}),\n            'Pex': Event('Pex', {'Zurn'}),\n            'Zurn': Event('Zurn', {'Zlim'}),\n            'Zlim': Event('Zlim', {'Glent', 'Zurn'})\n        }\n\n    def simulate(self, event_to_toggle):\n        event = self.events[event_to_toggle]\n        event.occurred = not event.occurred\n        for cause in event.causes:\n            self.events[cause].occurred = False\n        for effect in event.causes | {event_to_toggle}:\n            self.events[effect].occurred = True\n        return self.events['Zlim'].occurred\n\nworld = World()\ninitial_state = {event.name for event in world.events.values() if event.occurred}\nnot_glent_state = world.simulate('Glent')\nanswer = not_glent_state != initial_state\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "403",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, Vank causes Scud, Scud causes Wrenk, and Wrenk and Praf together cause Klep.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 17,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nPraf = Event(\"Praf\", {\"Vank\", \"Klep\"})\nVank = Event(\"Vank\", {\"Scud\", \"Klep\"})\nScud = Event(\"Scud\", {\"Wrenk\", \"Klep\"})\nWrenk = Event(\"Wrenk\", {\"Klep\"})\nKlep = Event(\"Klep\", set())\n\ndef simulate(events):\n    events[Praf.name].occurred = False\n    for event in events[Praf.name].causes:\n        events[event].occurred = False\n        if not events[event].causes:\n            continue\n        simulate(events)\n        if events[event].occurred:\n            events[event].occurred = False\n            break\n    events[Praf.name].occurred = True\n\nsimulate({Praf.name: Praf, Vank.name: Vank, Scud.name: Scud, Wrenk.name: Wrenk, Klep.name: Klep})\n\nif Klep.occurred:\n    print(\"Klep would not occur if not Praf instead of Praf.\")\nelse:\n    print(\"Klep would occur if not Praf instead of Praf.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "603",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, Blorn causes Plim, Plim causes Quaz, and Quaz and Fizo together cause Jext.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 18,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\", {Fizo})\nPlim = Event(\"Plim\", {Blorn})\nQuaz = Event(\"Quaz\", {Plim})\nJext = Event(\"Jext\", {Fizo, Quaz})\n\ndef simulate(events):\n    events[Fizo].occurred = True\n    for event in events[Fizo].causes:\n        events[event].occurred = True\n        for cause in events[event].causes:\n            if cause != Fizo and not events[cause].occurred:\n                events[event].occurred = False\n                break\n    return Jext.occurred\n\nsimulate({Fizo, Blorn, Plim, Quaz, Jext})",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "803",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, Splee causes Blen, Blen causes Druk, and Druk and Nuv together cause Wrox.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 19,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.caused_by = []\n\nNuv = Event(\"Nuv\")\nSplee = Event(\"Splee\")\nBlen = Event(\"Blen\")\nDruk = Event(\"Druk\")\nWrox = Event(\"Wrox\")\n\nNuv.causes.append(Splee)\nSplee.causes.append(Blen)\nBlen.causes.append(Druk)\nWrox.caused_by = [Nuv, Druk]\n\ndef simulate(events, event_to_remove):\n    for event in events:\n        if event == event_to_remove:\n            event.occurred = False\n        if not event.occurred and event.caused_by:\n            for cause in event.caused_by:\n                cause.occurred = False\n        for effect in event.causes:\n            if not effect.occurred:\n                break\n            if effect == Wrox:\n                return False\n\ndef run_simulation():\n    events = [Nuv, Splee, Blen, Druk, Wrox]\n    simulate(events, Nuv)\n    return not Wrox.occurred\n\nprint(run_simulation())",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "4",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf and Trune together cause Vork, and Vork causes Lumbo.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 20,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.caused_by = []\n\nZiklo = Event(\"Ziklo\")\nBlaf = Event(\"Blaf\")\nTrune = Event(\"Trune\")\nVork = Event(\"Vork\")\nLumbo = Event(\"Lumbo\")\n\nZiklo.causes.append(Blaf)\nBlaf.caused_by.append(Ziklo)\nBlaf.causes.append(Trune)\nTrune.caused_by.append(Blaf)\nTrune.causes.append(Vork)\nVork.caused_by.append(Trune)\nVork.causes.append(Lumbo)\n\ndef simulate(event, occur=True):\n    event.occurred = occur\n    for cause in event.causes:\n        if not cause.occurred:\n            continue\n        cause.caused_by.append(event)\n        if not event in cause.caused_by:\n            cause.caused_by.append(event)\n\ndef counterfactual(event):\n    simulate(event, occur=False)\n    for event in [Ziklo, Blaf, Trune, Vork, Lumbo]:\n        event.occurred = False\n    simulate(Ziklo)\n    return Lumbo.occurred\n\nprint(counterfactual(Ziklo))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "204",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, Razz and Pex together cause Zurn, and Zurn causes Zlim.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 21,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.effects = []\n\nglent = Event(\"Glent\")\nrazz = Event(\"Razz\")\npex = Event(\"Pex\")\nzurn = Event(\"Zurn\")\nzlim = Event(\"Zlim\")\n\nglent.effects.append(razz)\nrazz.effects.append(pex)\nrazz.effects.append(zurn)\nzurn.effects.append(zlim)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for effect in event.effects:\n                effect.occurred = True\n\ndef counterfactual(event, events):\n    original_state = [event.occurred for event in events]\n    event.occurred = False\n    simulate(events)\n    return not any([event.occurred for event in events if event != event]) and original_state[0]\n\nsimulate([glent, razz, pex, zurn, zlim])\nprint(counterfactual(glent, [glent, razz, pex, zurn, zlim]))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "404",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, Vank and Scud together cause Wrenk, and Wrenk causes Klep.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 22,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nPraf = Event(\"Praf\")\nVank = Event(\"Vank\")\nScud = Event(\"Scud\")\nWrenk = Event(\"Wrenk\")\nKlep = Event(\"Klep\")\n\nPraf.causes.add(Vank)\nVank.causes.add(Scud)\nVank.causes.add(Wrenk)\nWrenk.causes.add(Klep)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                if not cause.occurred:\n                    return False\n        else:\n            for cause in event.causes:\n                if cause.occurred:\n                    event.occurred = True\n    return True\n\nPraf.occurred = True\nresult = simulate([Praf, Vank, Scud, Wrenk, Klep])\nif not result:\n    print(\"Klep would not occur if not Praf instead of Praf.\")\nelse:\n    print(\"Klep would occur if not Praf instead of Praf.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "604",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, Blorn and Plim together cause Quaz, and Quaz causes Jext.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 23,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.caused_by = []\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\")\nPlim = Event(\"Plim\")\nQuaz = Event(\"Quaz\")\nJext = Event(\"Jext\")\n\nFizo.causes.append(Blorn)\nBlorn.caused_by.append(Fizo)\nBlorn.causes.append(Plim)\nPlim.caused_by.append(Blorn)\nPlim.causes.append(Quaz)\nQuaz.caused_by.append(Plim)\nQuaz.causes.append(Jext)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                if not cause.occurred:\n                    cause.occurred = True\n                    simulate(events)\n\ndef revert(events):\n    for event in events:\n        if event.occurred:\n            for cause in reversed(event.caused_by):\n                if cause.occurred:\n                    cause.occurred = False\n                    revert(events)\n\nFizo.occurred = False\nsimulate([Fizo, Blorn, Plim, Quaz, Jext])\nif Jext.occurred:\n    result = \"Jext would not occur if not Fizo\"\nelse:\n    result = \"Jext would occur if not Fizo\"\n\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "804",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, Splee and Blen together cause Druk, and Druk causes Wrox.",
+        "true_answer": "no",
+        "type": "basic",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 24,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.effects = []\n\nNuv = Event(\"Nuv\")\nSplee = Event(\"Splee\")\nBlen = Event(\"Blen\")\nDruk = Event(\"Druk\")\nWrox = Event(\"Wrox\")\n\nNuv.causes.append(Splee)\nSplee.effects.append(Druk)\nSplee.effects.append(Blen)\nDruk.effects.append(Wrox)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for effect in event.effects:\n                effect.occurred = True\n\ndef counterfactual(event, events):\n    event.occurred = False\n    simulate(events)\n    return Wrox.occurred\n\ncounterfactual(Nuv, [Nuv, Splee, Blen, Druk, Wrox])",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "5",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes not Blaf, Blaf and Trune together cause Vork, Vork causes Lumbo. We observed Trune",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 25,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None, caused_by=None):\n        self.name = name\n        self.causes = causes if causes else []\n        self.caused_by = caused_by if caused_by else []\n\nevents = {\n    \"Ziklo\": Event(\"Ziklo\"),\n    \"Blaf\": Event(\"Blaf\", causes=[\"Trune\"]),\n    \"Trune\": Event(\"Trune\", causes=[\"Blaf\"], caused_by=[\"Vork\"]),\n    \"Vork\": Event(\"Vork\", caused_by=[\"Trune\"]),\n    \"Lumbo\": Event(\"Lumbo\", caused_by=[\"Vork\"])\n}\n\ndef simulate(event_to_remove, events):\n    for event in events.values():\n        if event.name == event_to_remove:\n            event.caused_by = []\n            for cause in event.causes:\n                events[cause].caused_by.remove(event_to_remove)\n            del events[event_to_remove]\n            return events\n\n    return simulate(f\"not {event_to_remove}\", events)\n\ndef can_occur(event, events):\n    for cause in event.causes:\n        if event.name not in events[cause].caused_by:\n            return False\n    return True\n\nevents = {k: v for k, v in events.items() if k != \"Trune\"}\nif can_occur(events[\"Lumbo\"], events):\n    print(\"Yes, Lumbo would occur if not Ziklo instead of Ziklo.\")\nelse:\n    print(\"No, Lumbo would not occur if not Ziklo instead of Ziklo.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "50",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo and Blaf together cause not Trune, Trune causes Vork, and Vork causes Lumbo. We observed Trune",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 250,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\ntrune = Event(\"Trune\", [\"Ziklo\", \"Blaf\"])\nvork = Event(\"Vork\", [trune])\nlumbo = Event(\"Lumbo\", [vork])\nziklo = Event(\"Ziklo\")\nblaf = Event(\"Blaf\")\n\ndef simulate(event, occurred=True):\n    event.occurred = occurred\n    if event.occurred:\n        for cause in event.causes:\n            simulate(cause)\n\nsimulate(ziklo, False)\nif not lumbo.occurred:\n    answer = \"Lumbo would not occur\"\nelse:\n    answer = \"Lumbo would occur\"\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "250",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent and Razz together cause not Pex, Pex causes Zurn, and Zurn causes Zlim. We observed Pex",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 251,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Glent\": Event(\"Glent\"),\n            \"Razz\": Event(\"Razz\"),\n            \"Pex\": Event(\"Pex\"),\n            \"Zurn\": Event(\"Zurn\"),\n            \"Zlim\": Event(\"Zlim\")\n        }\n\n    def occur(self, event_name):\n        event = self.events[event_name]\n        event.occurred = True\n        for cause in event.causes:\n            self.events[cause].occurred = True\n\n    def would_occur(self, event_name):\n        event = self.events[event_name]\n        for cause in event.causes:\n            if not self.events[cause].occurred:\n                return False\n        return True\n\nworld = World()\nworld.occur(\"Glent\")\nworld.occur(\"Razz\")\nworld.occur(\"Pex\")\n\nif not world.would_occur(\"Glent\"):\n    answer = \"Zlim would not occur if not Glent instead of Glent\"\nelse:\n    answer = \"Zlim would occur if not Glent instead of Glent\"\n\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "450",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf and Vank together cause not Scud, Scud causes Wrenk, and Wrenk causes Klep. We observed Scud",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 252,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nScud = Event('Scud', ['Vank', 'Praf'])\nPraf = Event('Praf', [])\nVank = Event('Vank', [])\nWrenk = Event('Wrenk', [Scud])\nKlep = Event('Klep', [Wrenk])\n\ndef simulate(events, new_state):\n    for event in events:\n        event.occurred = new_state[event.name]\n\ndef counterfactual(events, event_to_change):\n    new_state = {name: False for name in events}\n    new_state[event_to_change.name] = not event_to_change.occurred\n    simulate(events, new_state)\n    return Klep.occurred\n\nPraf.occurred = False\ncounterfactual(set([Praf, Scud, Vank, Wrenk, Klep]), Praf)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "650",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo and Blorn together cause not Plim, Plim causes Quaz, and Quaz causes Jext. We observed Plim",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 253,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Fizo\": Event(\"Fizo\"),\n            \"Blorn\": Event(\"Blorn\"),\n            \"Plim\": Event(\"Plim\"),\n            \"Quaz\": Event(\"Quaz\"),\n            \"Jext\": Event(\"Jext\")\n        }\n\n    def observe(self, event):\n        self.events[event.name].occurred = True\n        for cause in self.events[event.name].causes:\n            self.events[cause.name].occurred = True\n\n    def counterfactual(self, event):\n        new_world = World()\n        for e in self.events.values():\n            e.occurred = e.name == event.name\n            if e.occurred:\n                for cause in e.causes:\n                    new_world.events[cause.name].occurred = False\n        return new_world\n\n    def would_jext_occur(self, event):\n        counterfactual_world = self.counterfactual(event)\n        return counterfactual_world.events[\"Plim\"].occurred\n\nworld = World()\nworld.observe(\"Plim\")\nprint(world.would_jext_occur(\"Fizo\"))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "850",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv and Splee together cause not Blen, Blen causes Druk, and Druk causes Wrox. We observed Blen",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 254,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Variable:\n    def __init__(self, name, causes, effects):\n        self.name = name\n        self.causes = set(causes)\n        self.effects = set(effects)\n        self.state = False\n\n    def toggle(self):\n        self.state = not self.state\n\n    def __str__(self):\n        return self.name\n\nNuv = Variable(\"Nuv\", sets(), {\"Blen\"})\nSplee = Variable(\"Splee\", sets(), {})\nBlen = Variable(\"Blen\", {(\"Nuv\", \"Splee\")}, {\"Druk\", \"Wrox\"})\nDruk = Variable(\"Druk\", {\"Blen\"}, {\"Wrox\"})\nWrox = Variable(\"Wrox\", {\"Druk\"}, sets())\n\nobserved_variables = {Blen}\n\ndef propagate(variables):\n    for var in variables:\n        if not var.state:\n            for effect in var.effects:\n                if all(v.state for v in effect if v != var):\n                    effect[0].toggle()\n\ndef counterfactual(variable):\n    variables_copy = {var for var in [Nuv, Splee, Blen, Druk, Wrox] if var != variable}\n    variables_copy.add(variable.toggle())\n    propagate(variables_copy)\n    return Wrox.state\n\ncounterfactual(Nuv)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "251",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, not Razz causes Pex, Pex causes Zurn, Zurn causes Melf, and not Melf causes Zlim. We observed Pex.",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 256,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nclass Counterfactual:\n    def __init__(self, event, replacement):\n        self.event = event\n        self.replacement = replacement\n\n    def would_occur(self, current_state):\n        if self.event.name == self.replacement:\n            return False\n        if self.event.name in self.replacement.causes:\n            return False\n        for cause in self.event.causes:\n            if cause == self.replacement or not current_state[cause].occurred:\n                return False\n        return True\n\nevents = {\n    'Glent': Event('Glent', {'Razz'}),\n    'Razz': Event('Razz', {'Pex'}),\n    'Pex': Event('Pex', {'Zurn'}),\n    'Zurn': Event('Zurn', {'Melf'}),\n    'Melf': Event('Melf', {'Zlim'})\n}\n\nobserved_event = events['Pex']\nobserved_event.occurred = True\n\ncounterfactual = Counterfactual(events['Glent'], events['None'])\nif counterfactual.would_occur({event.name: event.occured for event in events.values()}):\n    print(\"Zlim would occur if not Glent instead of Glent.\")\nelse:\n    print(\"Zlim would not occur if not Glent instead of Glent.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "451",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, not Vank causes Scud, Scud causes Wrenk, Wrenk causes Yobb, and not Yobb causes Klep. We observed Scud.",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 257,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nPraf = Event(\"Praf\", [\"Vank\"])\nVank = Event(\"Vank\", [\"Scud\"])\nScud = Event(\"Scud\", [\"Wrenk\"])\nWrenk = Event(\"Wrenk\", [\"Yobb\"])\nYobb = Event(\"Yobb\", [])\nKlep = Event(\"Klep\", [])\n\ndef simulate(events):\n    events[Scud].occurred = True\n    for event in events[Scud].causes:\n        events[event].occurred = True\n        for cause in events[event].causes:\n            if cause != event and cause not in events:\n                events[cause] = Event(cause, [])\n            events[cause].occurred = True\n\ndef would_occur(event, events):\n    simulate(events)\n    return events[event].occurred\n\nevents = {Praf.name: Praf, Vank.name: Vank, Scud.name: Scud, Wrenk.name: Wrenk, Yobb.name: Yobb, Klep.name: Klep}\nif not events[Praf.name].occurred:\n    events_no_praf = {k: v for k, v in events.items() if k != Praf.name}\n    if would_occur(Klep.name, events_no_praf):\n        return \"Klep would occur if not Praf instead of Praf\"\n    else:\n        return \"Klep would not occur if not Praf instead of Praf\"\nelse:\n    return \"Klep would occur if Praf\"",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "651",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, not Blorn causes Plim, Plim causes Quaz, Quaz causes Skul, and not Skul causes Jext. We observed Plim.",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 258,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nFizo = Event(\"Fizo\", {\"Blorn\"})\nBlorn = Event(\"Blorn\", {\"Fizo\", \"Plim\"})\nPlim = Event(\"Plim\", {\"Fizoo\", \"Quaz\"})\nQuaz = Event(\"Quaz\", {\"Plim\", \"Skul\"})\nSkul = Event(\"Skul\", {\"Quaz\"})\nJext = Event(\"Jext\", {\"Skul\"})\n\nFizo.occurred = True\nPlim.occurred = True\n\ndef simulate(event_to_toggle, events):\n    for event in events:\n        if event != event_to_toggle and event.name in event_to_toggle.causes:\n            event.occurred = False\n        if event.occurred and not event in event_to_toggle.causes:\n            event.occurred = False\n\ndef counterfactual(event):\n    simulate(Event(\"Not_\" + event.name, {event.name}), [Fizo, Blorn, Plim, Quaz, Skul, Jext])\n    return Jext.occurred\n\ncounterfactual(Fizo)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "851",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, not Splee causes Blen, Blen causes Druk, Druk causes Plog, and not Plog causes Wrox. We observed Blen.",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 259,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nNuv = Event(\"Nuv\", set([\"Splee\"]))\nSplee = Event(\"Splee\", set([\"Blen\"]))\nBlen = Event(\"Blen\", set([\"Druk\"]))\nDruk = Event(\"Druk\", set([\"Plog\"]))\nPlog = Event(\"Plog\", set([\"Wrox\"]))\nWrox = Event(\"Wrox\", set())\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occurred = True\n\ndef counterfactual(events, event_to_toggle):\n    toggle_event = events[event_to_toggle]\n    toggle_event.occurred = not toggle_event.occurred\n    simulate(events)\n\nevents = {Nuv, Splee, Blen, Druk, Plog, Wrox}\nevents[\"Blen\"].occurred = True\ncounterfactual(events, \"Nuv\")\nreturn Wrox.occurred",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "52",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes not Blaf, Blaf causes Trune, Trune and Blaf together cause Vork, and not Vork causes Lumbo. We observed Trune",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 260,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=None, caused_by=None, causes=None):\n        self.name = name\n        self.causes_not = causes_not if causes_not else set()\n        self.caused_by = caused_by if caused_by else set()\n        self.causes = causes if causes else set()\n\nZiklo = Event(\"Ziklo\")\nBlaf = Event(\"Blaf\")\nTrune = Event(\"Trune\")\nVork = Event(\"Vork\")\nLumbo = Event(\"Lumbo\")\n\nZiklo.causes.add(Blaf)\nBlaf.causes.add(Trune)\nBlaf.causes.add(Vork)\nTrune.causes.add(Vork)\nVork.causes_not.add(Lumbo)\n\ndef simulate(events, observed_events):\n    possible_events = set(events)\n    for event in observed_events:\n        possible_events.remove(event)\n        for cause in events[event].causes:\n            if cause not in possible_events:\n                possible_events.add(cause)\n    return possible_events\n\nevents = {Ziklo: None, Blaf: None, Trune: None, Vork: None, Lumbo: None}\nobserved_events = {Trune}\nnot_ziklo_events = simulate(events, observed_events)\nnot_ziklo_events.discard(Ziklo)\n\nif Lumbo in not_ziklo_events:\n    answer = \"Yes, Lumbo would occur if not Ziklo instead of Ziklo.\"\nelse:\n    answer = \"No, Lumbo would not occur if not Ziklo instead of Ziklo.\"\n\nprint(answer)",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "252",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes not Razz, Razz causes Pex, Pex and Razz together cause Zurn, and not Zurn causes Zlim. We observed Pex",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 261,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_zurn=False, caused_by_zlim=False):\n        self.name = name\n        self.causes_zurn = causes_zurn\n        self.caused_by_zlim = caused_by_zlim\n        self.occurred = False\n\nclass Scenario:\n    def __init__(self, events):\n        self.events = events\n\n    def evaluate(self):\n        for event in self.events:\n            if event.occurred:\n                for cause in event.causes_zurn:\n                    cause.occurred = True\n                for effect in event.caused_by_zlim:\n                    effect.occured = False\n\nglent = Event(\"Glent\")\nrazz = Event(\"Razz\")\npex = Event(\"Pex\")\nzurn = Event(\"Zurn\")\nzlim = Event(\"Zlim\")\n\nscenario = Scenario([glent, razz, pex])\nscenario.evaluate()\n\nif not pex.occurred:\n    glent.occurred = False\n    scenario = Scenario([glent, razz])\n    scenario.evaluate()\n\nif not zlim.occurred:\n    pex.occurred = False\n    scenario = Scenario([pex, razz, zurn])\n    scenario.evaluate()\n\nif not zurn.occurred:\n    razz.occurred = False\n    scenario = Scenario([razz])\n    scenario.evaluate()\n\nif not glent.occurred:\n    return \"Zlim would not occur\"\nelse:\n    return \"Zlim would occur\"",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "452",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes not Vank, Vank causes Scud, Scud and Vank together cause Wrenk, and not Wrenk causes Klep. We observed Scud",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 262,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None, prevented_by=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.prevented_by = set(prevented_by) if prevented_by else set()\n\nScud = Event(\"Scud\")\nVank = Event(\"Vank\")\nWrenk = Event(\"Wrenk\")\nKlep = Event(\"Klep\")\nPraf = Event(\"Praf\")\n\nScud.causes.add(Vank)\nScud.causes.add(Vank.name)\nVank.causes.add(Wrenk)\nVank.causes.add(Scud)\nWrenk.prevented_by.add(Klep)\n\ndef counterfactual(event, replacement):\n    events = {event.name: replacement}\n    for e in events.values():\n        for cause in e.causes:\n            if cause in events:\n                events[cause].prevented_by.add(e.name)\n            else:\n                events[cause].causes.discard(e.name)\n    return events\n\ndef would_occur(event, events):\n    return event.name not in events['Klep'].prevented_by\n\ncounterfactual_scenario = counterfactual(Praf, \"Not Praf\")\nprint(would_occur(Klep, counterfactual_scenario))",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "652",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes not Blorn, Blorn causes Plim, Plim and Blorn together cause Quaz, and not Quaz causes Jext. We observed Plim",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 263,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, prerequisites=None, antirequisites=None):\n        self.effect = effect\n        self.prerequisites = prerequisites if prerequisites else []\n        self.antirequisites = antirequisites if antirequisites else []\n\ndef simulate(causes, observed):\n    state = {cause.effect: False for cause in causes}\n    for cause in causes:\n        if all(state[prereq] for prereq in cause.prerequisites) and not any(state[antireq] for antireq in cause.antirequisites):\n            state[cause.effect] = True\n    return state[observed]\n\ncauses = [\n    Cause(\"Fizo\", antirequisites=[\"Jext\"]),\n    Cause(\"Blorn\", prerequisites=[\"Fizo\"]),\n    Cause(\"Plim\", prerequisites=[\"Blorn\"]),\n    Cause(\"Quaz\", prerequisites=[\"Plim\", \"Blorn\"]),\n    Cause(\"Jext\", antirequisites=[\"Quaz\"])\n]\n\nprint(simulate(causes, \"Plim\") and not simulate(causes, \"Fizo\") and simulate(causes, \"not Fizo\"))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "852",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes not Splee, Splee causes Blen, Blen and Splee together cause Druk, and not Druk causes Wrox. We observed Blen",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 264,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Entity:\n    def __init__(self, name, causes, affected_by):\n        self.name = name\n        self.causes = set(causes)\n        self.affected_by = set(affected_by)\n        self.status = False\n\nclass Relationship:\n    def __init__(self, entity1, entity2, condition):\n        self.entity1 = entity1\n        self.entity2 = entity2\n        self.condition = condition\n\nentities = {\n    'Nuv': Entity('Nuv', {}, {'Splee'}),\n    'Splee': Entity('Splee', {'Blen'}, {'Druk', 'Wrox'}),\n    'Blen': Entity('Blen', {'Splee'}, {'Druk'}),\n    'Druk': Entity('Druk', {'Splee', 'Blen'}, {'Wrox'}),\n    'Wrox': Entity('Wrox', {}, {'Druk'})\n}\n\nrelationships = [\n    Relationship(entities['Nuv'], entities['Splee'], 'not'),\n    Relationship(entities['Splee'], entities['Blen'], None),\n    Relationship(entities['Blen'], entities['Druk'], None),\n    Relationship(entities['Druk'], entities['Wrox'], 'not'),\n]\n\ndef update_status(entity):\n    for relationship in relationships:\n        if relationship.entity1 == entity:\n            if relationship.condition == 'not':\n                entity.status = False\n            else:\n                for cause in relationship.entity2.causes:\n                    if cause in entity.causes:\n                        entity.status = True\n\nfor entity in entities.values():\n    if 'Blen' in entity.causes:\n        entity.status = True\n\nfor entity in entities.values():\n    update_status(entity)\n\nif not entities['Wrox'].status:\n    print(\"Wrox would not occur if not Nuv instead of Nuv\")\nelse:\n    print(\"Wrox would occur if not Nuv instead of Nuv\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "53",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf causes Trune, Trune causes not Vork, and Vork causes Lumbo. We observed Vork",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 265,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\ndef create_events(given_info):\n    events = {}\n    for info in given_info.split(\", \"):\n        cause, effect = info.split(\"causes\")[0].strip(), info.split(\"causes\")[1].strip()\n        events[cause] = Event(cause, {effect})\n    return events\n\ndef create_relationships(events):\n    relationships = {}\n    for event in events.values():\n        for effect in event.causes_not:\n            if effect not in relationships:\n                relationships[effect] = set()\n            relationships[effect].add(event.name)\n    return relationships\n\ndef model_scenario(events, relationships, new_cause):\n    new_event = Event(new_cause, {})\n    for effect in relationships:\n        if new_cause in relationships[effect]:\n            new_event.causes_not.add(effect)\n    return new_event\n\ndef evaluate_scenario(event):\n    return event.causes_not.disjoint({\"Lumbo\"})\n\nevents = create_events(given_info)\nrelationships = create_relationships(events)\nnew_event = model_scenario(events, relationships, \"not Ziklo\")\nif evaluate_scenario(new_event):\n    print(\"Yes, Lumbo would occur if not Ziklo instead of Ziklo.\")\nelse:\n    print(\"No, Lumbo would not occur if not Ziklo instead of Ziklo.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "253",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, Razz causes Pex, Pex causes not Zurn, and Zurn causes Zlim. We observed Zurn",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 266,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\ndef create_events(given_info):\n    events = {}\n    for info in given_info.split(\", \"):\n        cause_effect = info.split(\" \")\n        cause = cause_effect[0].strip(\"'\")\n        effect = cause_effect[2].strip(\"'\")\n        if effect not in events:\n            events[effect] = Event(effect, False)\n        if cause not in events:\n            events[cause] = Event(cause, True)\n        events[cause].causes_not.append(events[effect])\n    return events\n\ndef simulate(events, new_state):\n    for event in events.values():\n        if event.name == new_state:\n            event.causes_not = []\n        if event.causes_not:\n            event.causes_not[0].causes_not = []\n    for event in events.values():\n        if event.causes_not:\n            event.causes_not[0].causes_not.append(event)\n\ndef counterfactual(events, state):\n    new_state = \"not \" + state\n    simulate(events, state)\n    simulate(events, new_state)\n    return Zlim in [event.name for event in events.values() if not event.causes_not]\n\nevents = create_events(\"'Glent', 'Razz', 'Razz', 'Pex', 'Pex', 'Pex', 'not Zurn', 'Zurn', 'Zurn', 'Zlim'\")\nresult = counterfactual(events, \"Glent\")\nprint(result)",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "453",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, Vank causes Scud, Scud causes not Wrenk, and Wrenk causes Klep. We observed Wrenk",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 267,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\ndef create_events(given_info):\n    events = {}\n    for info in given_info.split(\", \"):\n        cause, effect = info.split(\" \")\n        if \"causes not\" in effect:\n            event = Event(effect.replace(\"causes not\", \"\"), {cause: None})\n        else:\n            event = Event(effect, {cause: None})\n        events[event.name] = event\n    return events\n\ndef create_relationships(given_info):\n    relationships = {}\n    for info in given_info.split(\", \"):\n        cause, effect = info.split(\" \")\n        relationship = Relationship(events[cause], events[effect])\n        relationships[f\"{cause}->{effect}\"] = relationship\n    return relationships\n\ndef simulate(events, relationships, new_state):\n    state = new_state.copy()\n    for event, relationship in relationships.items():\n        if state[event.cause.name]:\n            if event.causes_not:\n                state[event.name.name] = not state[event.name.name]\n            else:\n                state[event.name.name] = True\n    return state\n\ndef main():\n    given_info = \"Praf causes Vank, Vank causes Scud, Scud causes not Wrenk, Wrenk causes Klep\"\n    events = create_events(given_info)\n    relationships = create_relationships(given_info)\n    initial_state = {event.name: True for event in events.values()}\n    new_state = initial_state.copy()\n    new_state[\"Praf\"] = False\n    result = simulate(events, relationships, new_state)\n    print(\"Klep\" in result)\n\nmain()",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "653",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, Blorn causes Plim, Plim causes not Quaz, and Quaz causes Jext. We observed Quaz",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 268,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes, caused_by):\n        self.name = name\n        self.causes = causes if causes else []\n        self.caused_by = caused_by if caused_by else []\n\nfizo = Event(\"Fizo\", [], [\"Blorn\"])\nblorn = Event(\"Blorn\", [fizo], [\"Plim\"])\nplim = Event(\"Plim\", [blorn], [\"Not Quaz\"])\nquaz = Event(\"Quaz\", [], [\"Jext\"])\nnot_fizo = Event(\"Not Fizo\", [], [])\n\ndef simulate(events, new_events):\n    for event in events + new_events:\n        for caused_by in event.caused_by:\n            if caused_by.name in new_events:\n                caused_by.caused_by.remove(event)\n                caused_by.caused_by.append(new_events[caused_by.name])\n    return events + new_events\n\ndef run_simulation(events, new_events):\n    simulated_events = simulate(events, new_events)\n    for event in simulated_events:\n        if event.name == \"Jext\" and \"Quaz\" not in event.caused_by:\n            return False\n    return True\n\nevents = [fizo, blorn, plim, quaz]\nnew_events = {not_fizo.name: not_fizo}\nresult = run_simulation(events, new_events)\nprint(not result)",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "853",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, Splee causes Blen, Blen causes not Druk, and Druk causes Wrox. We observed Druk",
+        "true_answer": "yes",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 269,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not):\n        self.name = name\n        self.causes_not = causes_not\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\ndef create_events(given_info):\n    events = {}\n    for info in given_info.split(\",\"):\n        cause_event, effect_event = info.strip().split(\" \")\n        if effect_event not in events:\n            events[effect_event] = Event(effect_event, False)\n        if cause_event not in events:\n            events[cause_event] = Event(cause_event, True)\n        events[cause_event].causes_not.add(events[effect_event].name)\n    return events\n\ndef simulate(events, new_cause_event, old_cause_event):\n    new_events = events.copy()\n    new_events[new_cause_event].causes_not.remove(new_events[new_cause_event].name)\n    new_events[new_cause_event].causes_not.add(old_cause_event)\n    new_events[old_cause_event].causes_not.remove(new_events[old_cause_event].name)\n    new_events[old_cause_event].causes_not.remove(new_events[new_cause_event].name)\n\n    wrox_occurs = True\n    for event in new_events.values():\n        if event.causes_not and event.name != 'Druk':\n            wrox_occurs = False\n            break\n    return wrox_occurs\n\nevents = create_events(\"Nuv causes Splee, Splee causes Blen, Blen causes not Druk, Druk causes Wrox\")\nquestion_event = 'Nuv'\nquestion_new_event = 'not Nuv'\nif simulate(events, question_new_event, question_event):\n    print(\"Wrox would not occur if not Nuv instead of Nuv\")\nelse:\n    print(\"Wrox would occur if not Nuv instead of Nuv\")",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "54",
+        "question": "Would Lumbo occur if not Ziklo instead of Ziklo?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf and Ziklo together cause Trune, Trune causes not Vork, and not Vork causes Lumbo. We observed Vork",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 270,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not, caused_by):\n        self.name = name\n        self.causes_not = causes_not\n        self.caused_by = set(caused_by)\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Ziklo\": Event(\"Ziklo\", set(), {\"Blaf\", \"Trune\"}),\n            \"Blaf\": Event(\"Blaf\", set(), {\"Ziklo\"}),\n            \"Trune\": Event(\"Trune\", {\"Vork\"}, {\"Ziklo\", \"Blaf\"}),\n            \"Vork\": Event(\"Vork\", {\"Trune\"}, set()),\n            \"Lumbo\": Event(\"Lumbo\", self.get_causes_not(\"Vork\"), set())\n        }\n\n    def get_causes_not(self, event_name):\n        event = self.events[event_name]\n        return event.causes_not | event.caused_by\n\n    def simulate(self, new_state):\n        self.state = new_state\n        self.state[\"Ziklo\"] = not self.state.get(\"Ziklo\", True)\n        return self.get_final_state(\"Lumbo\")\n\n    def get_final_state(self, event_name):\n        events = self.events\n        state = self.state\n        for event in events:\n            if event != event_name and (event in state or event in events[event].caused_by):\n                causes_not = self.get_causes_not(event)\n                if event_name in causes_not:\n                    return False\n        return True\n\nworld = World()\nworld.state = {\"Vork\": True}\nresult = world.simulate({\"Ziklo\": False})\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "254",
+        "question": "Would Zlim occur if not Glent instead of Glent?",
+        "given_info": "We know that Glent causes Razz, Razz and Glent together cause Pex, Pex causes not Zurn, and not Zurn causes Zlim. We observed Zurn",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 271,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not_zurn=False, caused_by_glent=False, causes_zurn=False, causes_pex=False):\n        self.name = name\n        self.causes_not_zurn = causes_not_zurn\n        self.caused_by_glent = caused_by_glent\n        self.causes_zurn = causes_zurn\n        self.causes_pex = causes_pex\n\nevents = {\n    'Glent': Event('Glent', caused_by_glent=True, causes_zurn=True),\n    'Razz': Event('Razz', caused_by_glent=True, causes_zurn=True, causes_pex=True),\n    'Pex': Event('Pex', causes_not_zurn=True, causes_zlim=True),\n    'Zurn': Event('Zurn', caused_by_zlim=True),\n    'Zlim': Event('Zlim', caused_by=Pex)\n}\n\ndef run_scenario(event_to_toggle):\n    for event in events.values:\n        if event.name == event_to_toggle:\n            event.caused_by_glent = not event.caused_by_glent\n        event.causes_zurn = False\n        event.causes_pex = False\n        event.causes_not_zurn = False\n\n    for event in events.values:\n        if event.caused_by_glent:\n            event.causes_zurn = True\n        if event.causes_zurn:\n            event.causes_pex = True\n        if not event.causes_not_zurn:\n            event.causes_not_zurn = event.causes_zurn and event.causes_pex\n\n    return events['Zlim'].caused_by\n\nrun_scenario('Glent')",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "454",
+        "question": "Would Klep occur if not Praf instead of Praf?",
+        "given_info": "We know that Praf causes Vank, Vank and Praf together cause Scud, Scud causes not Wrenk, and not Wrenk causes Klep. We observed Wrenk",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 272,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not, caused_by):\n        self.name = name\n        self.causes_not = causes_not\n        self.caused_by = set(caused_by)\n\nclass World:\n    def __init__(self, events):\n        self.events = events\n        self.current_state = set()\n\n    def update(self, event):\n        if event.name not in self.current_state:\n            self.current_state.add(event.name)\n            for cause in event.caused_by:\n                if cause not in self.current_state:\n                    self.current_state.add(cause)\n            for effect in event.caused_by:\n                if effect in self.events and not event.name in self.events[effect].causes_not:\n                    self.events[effect].caused_by.remove(event.name)\n\n    def simulate(self, new_state):\n        world = World(self.events)\n        world.current_state = new_state\n        for event in self.events.values():\n            world.update(Event(event.name, event.causes_not, event.caused_by))\n        return Klep in world.current_state\n\nevents = {\n    \"Praf\": Event(\"Praf\", set(), {\"Vank\", \"Scud\"}),\n    \"Vank\": Event(\"Vank\", set(), {\"Praf\", \"Scud\"}),\n    \"Scud\": Event(\"Scud\", {\"Wrenk\"}, {\"Klep\"}),\n    \"Wrenk\": Event(\"Wrenk\", set(), {\"Klep\"})\n}\n\nworld = World(events)\nworld.simulate({\"Praf\"})  # True\nworld.simulate({\"Not Praf\"})  # False",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "654",
+        "question": "Would Jext occur if not Fizo instead of Fizo?",
+        "given_info": "We know that Fizo causes Blorn, Blorn and Fizo together cause Plim, Plim causes not Quaz, and not Quaz causes Jext. We observed Quaz",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 273,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, prerequisites=None):\n        self.effect = effect\n        self.prerequisites = prerequisites if prerequisites else []\n\ndef observe(entity):\n    entity.observed = True\n\ndef simulate(causes, variables, observed_entities):\n    for cause in causes:\n        if all(variable.observed for variable in cause.prerequisites):\n            if cause.effect not in variables:\n                variables.append(Cause(cause.effect, cause.prerequisites))\n            variables[cause.effect].observed = True\n\n    return variables\n\ncauses = [\n    Cause(\"Blorn\", []),\n    Cause(\"Plim\", [Cause(\"Blorn\"), Cause(\"Fizo\")]),\n    Cause(\"Jext\", [Cause(\"Not Quaz\")]),\n    Cause(\"Not Quaz\", [])\n]\n\nFizo = Cause(\"Fizo\")\nBlorn = Cause(\"Blorn\")\nPlim = Cause(\"Plim\")\nQuaz = Cause(\"Quaz\")\nJext = Cause(\"Jext\")\nNot_Quaz = Cause(\"Not Quaz\")\n\nobserved_entities = [Quaz]\n\nvariables = [Fizo, Blorn, Plim, Quaz, Jext, Not_Quaz]\n\nsimulate(causes, variables, observed_entities)\n\nnot_Fizo_variables = simulate(causes, variables.copy(), observed_entities.copy())\nnot_Fizo_variables.remove(Fizo)\nnot_Fizo_variables.append(Cause(\"Not Fizo\", [Fizo]))\n\nif \"Jext\" in not_Fizo_variables:\n    result = \"Yes, Jext would occur if not Fizo instead of Fizo\"\nelse:\n    result = \"No, Jext would not occur if not Fizo instead of Fizo\"\n\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "854",
+        "question": "Would Wrox occur if not Nuv instead of Nuv?",
+        "given_info": "We know that Nuv causes Splee, Splee and Nuv together cause Blen, Blen causes not Druk, and not Druk causes Wrox. We observed Druk",
+        "true_answer": "no",
+        "type": "conditional",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 274,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not, caused_by):\n        self.name = name\n        self.causes_not = causes_not\n        self.caused_by = set(caused_by)\n\nNuv = Event(\"Nuv\", set(), {\"Splee\", \"Blen\"})\nSplee = Event(\"Splee\", set(), {\"Nuv\", \"Blen\", \"Blen\"})\nBlen = Event(\"Blen\", {\"Druk\"}, {\"Nuv\", \"Splee\"})\nDruk = Event(\"Druk\", set(), {\"not Wrox\"})\nWrox = Event(\"Wrox\", set(Druk.causes_not), {})\n\ndef simulate(events, new_state):\n    state = {event.name: event for event in events}\n    for event in events:\n        if event.name in new_state and event.name not in state[event.name].caused_by:\n            state[event.name].caused_by.remove(new_state[event.name])\n        if new_state[event.name] not in state[event.name].causes_not:\n            state[event.name].causes_not.add(new_state[event.name])\n    return [event for event in events if not event.caused_by & state[Druk.name].causes_not]\n\nevents = [Nuv, Splee, Blen, Druk, Wrox]\nnew_state = {\"not Nuv\": True}\nsimulated_events = simulate(events, new_state)\nif \"Wrox\" in simulated_events:\n    result = \"Wrox would occur\"\nelse:\n    result = \"Wrox would not occur\"\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "100",
+        "question": "Would Lumbo occur if not Ziklo and not Blaf?",
+        "given_info": "We know that Ziklo causes Blaf and Vork, Blaf causes not Trune, Trune or Vork causes Lumbo.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 500,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Ziklo\": Event(\"Ziklo\"),\n            \"Blaf\": Event(\"Blaf\"),\n            \"Vork\": Event(\"Vork\"),\n            \"Trune\": Event(\"Trune\"),\n            \"Lumbo\": Event(\"Lumbo\")\n        }\n\n    def trigger(self, event_name):\n        event = self.events[event_name]\n        event.occurred = True\n        for cause in event.causes:\n            self.events[cause].causes.remove(event_name)\n\n    def simulate(self, event_names):\n        for event_name in event_names:\n            self.trigger(event_name)\n\n    def check_lumbo(self):\n        self.simulate([\"Ziklo\", \"Blaf\"])\n        return not self.events[\"Lumbo\"].occurred\n\nworld = World()\nif world.check_lumbo():\n    print(\"Lumbo would not occur if not Ziklo and not Blaf.\")\nelse:\n    print(\"Lumbo would occur if not Ziklo and not Blaf.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "300",
+        "question": "Would Zlim occur if not Glent and not Razz?",
+        "given_info": "We know that Glent causes Razz and Zurn, Razz causes not Pex, Pex or Zurn causes Zlim.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 501,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nglent = Event(\"Glent\")\nrazz = Event(\"Razz\")\nzurn = Event(\"Zurn\")\nzlim = Event(\"Zlim\")\npex = Event(\"Pex\")\n\nglent.causes.add(razz)\nrazz.causes.add(zurn)\nrazz.causes.add(zlim)\n\ndef simulate(events):\n    for event in events:\n        if not event.occurred and event.causes - {occurred_events} != set():\n            event.occur()\n\noccurred_events = set()\nsimulate([glent, razz])\noccurred_events.add(glent)\noccurred_events.add(razz)\nsimulate([zurn])\noccurred_events.add(zurn)\n\nsimulate([zlim])\n\nif zlim.occurred:\n    result = \"Yes, Zlim would occur\"\nelse:\n    result = \"No, Zlim would not occur\"\n\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "500",
+        "question": "Would Klep occur if not Praf and not Vank?",
+        "given_info": "We know that Praf causes Vank and Wrenk, Vank causes not Scud, Scud or Wrenk causes Klep.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 502,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None, prevented_by=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.prevented_by = set(prevented_by) if prevented_by else set()\n\nevents = {\n    'Praf': { 'Vank', 'Wrenk' },\n    'Vank': { },\n    'Scud': { },\n    'Wrenk': { 'Klep' },\n    'Klep': { }\n}\n\ndef no_event(event_name):\n    return Event(event_name, prevented_by={event_name})\n\ndef counterfactual(event1, event2):\n    return (no_event(event1.name) if event1 else Event('')) & event2\n\ndef would_occur(event, counterfactual_scenario):\n    return event.name in counterfactual_scenario.causes or event.name in counterfactual_scenario.prevented_by\n\ncounterfactual_scenario = counterfactual(events['Praf'], counterfactual(events['Vank']))\nreturn not would_occur(events['Klep'], counterfactual_scenario)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "700",
+        "question": "Would Jext occur if not Fizo and not Blorn?",
+        "given_info": "We know that Fizo causes Blorn and Quaz, Blorn causes not Plim, Plim or Quaz causes Jext.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 503,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\")\nQuaz = Event(\"Quaz\")\nPlim = Event(\"Plim\")\nJext = Event(\"Jext\")\n\nFizo.causes.add(Blorn)\nBlorn.causes.add(Quaz)\n\ndef simulate(events):\n    events[Fizo].occurred = False\n    events[Blorn].occurred = False\n    for event in events.values():\n        if not event.occurred and event != Fizo and event != Blorn:\n            event.occurred = True\n        for cause in event.causes:\n            if not events[cause].occurred:\n                events[cause].occurred = True\n    return events[Jext].occurred\n\nprint(simulate({Fizo, Blorn, Quaz, Plim, Jext}))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "900",
+        "question": "Would Wrox occur if not Nuv and not Splee?",
+        "given_info": "We know that Nuv causes Splee and Druk, Splee causes not Blen, Blen or Druk causes Wrox.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 504,
+            "graph_id": "graph5"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nNuv = Event(\"Nuv\", {\"Splee\", \"Druk\"})\nSplee = Event(\"Splee\", {\"Druk\"})\nDruk = Event(\"Druk\", {\"Blen\"})\nBlen = Event(\"Blen\", {})\nWrox = Event(\"Wrox\", {})\n\ndef simulate(events):\n    for event in events:\n        for cause in event.causes:\n            if event.occurred and cause.occurred:\n                cause.occurred = True\n\ndef counterfactual(event):\n    event.occurred = False\n    simulate([event])\n    return not Wrox.occurred\n\nNuv.occurred = True\nSplee.occurred = True\nsimulate([Nuv, Splee])\n\nif not counterfactual(Nuv):\n    print(\"Wrox would occur if not Nuv and not Splee\")\nelse:\n    print(\"Wrox would not occur if not Nuv and not Splee\")",
+        "text_path_prediction": "yes"
+    },
+    {
+        "question_id": "101",
+        "question": "Would Lumbo occur if not Ziklo and not Blaf?",
+        "given_info": "We know that Ziklo causes Blaf and Trune, Trune causes Vork, Vork cause not Sline, Sline causes Frim and Qado, Qado causes Lumbo.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 505,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect):\n        self.effect = effect\n        self.causes = []\n\n    def add_cause(self, cause):\n        self.causes.append(cause)\n\nclass Node:\n    def __init__(self, name):\n        self.name = name\n        self.causes = []\n        self.effects = []\n\n    def add_cause(self, cause):\n        cause.effects.append(self)\n        self.causes.append(cause)\n\n    def add_effect(self, effect):\n        effect.causes.append(self)\n        self.effects.append(effect)\n\nziklo = Cause(\"Lumbo\")\nblaf = Cause(\"Lumbo\")\ntrune = Node(\"Trune\")\nvork = Node(\"Vork\")\nsline = Node(\"Sline\")\nfrim = Node(\"Frim\")\nqado = Node(\"Qado\")\nlumbo = Node(\"Lumbo\")\n\nziklo.add_cause(blaf)\nziklo.add_cause(trune)\ntrune.add_effect(vork)\nvork.add_effect(lumbo.name)\nvork.add_effect(-sline.name)\nsline.add_effect(frim)\nsline.add_effect(qado)\nqado.add_effect(lumbo)\n\ndef is_caused(node, blocked=False):\n    if blocked and node.name in [\"Sline\", \"-Sline\"]:\n        return False\n    return any([cause.effect == node.name for cause in node.causes]) or any([is_caused(effect, blocked) for effect in node.effects])\n\ndef counterfactual(node):\n    return not is_caused(node, True)\n\nif counterfactual(lumbo):\n    print(\"Lumbo would not occur if not Ziklo and not Blaf.\")\nelse:\n    print(\"Lumbo would occur if not Ziklo and not Blaf.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "301",
+        "question": "Would Zlim occur if not Glent and not Razz?",
+        "given_info": "We know that Glent causes Razz and Pex, Pex causes Zurn, Zurn cause not Melf, Melf causes Crip and Flen, Flen causes Zlim.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 506,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effects, antieffects=None):\n        self.effects = set(effects)\n        self.antieffects = set(antieffects) if antieffects else set()\n\n    def __repr__(self):\n        return f\"Cause({self.effects}, {self.antieffects})\"\n\nglent = Cause((\"Razz\", \"Pex\", \"Flen\"))\nrazz = Cause((\"Pex\", \"Zlim\"))\npex = Cause((\"Zurn\"))\nzurn = Cause(set(), antieffects=(\"Melf\",))\nmelf = Cause((\"Crip\", \"Flen\"), antieffects=(\"Zlim\",))\nflen = Cause((\"Zlim\", \"Crip\"))\n\ndef simulate(causes, variables):\n    state = {var: False for var in variables}\n    for cause in causes:\n        for effect in cause.effects:\n            if state[effect]:\n                state[cause.effects - {effect}] |= {True for antieffect in cause.antieffects if not state[antieffect]}\n    return state[\"Zlim\"]\n\nprint(simulate([glent, razz, pex, zurn, melf, flen], [\"Glent\", \"Razz\"]))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "501",
+        "question": "Would Klep occur if not Praf and not Vank?",
+        "given_info": "We know that Praf causes Vank and Scud, Scud causes Wrenk, Wrenk cause not Yobb, Yobb causes Glim and Spog, Spog causes Klep.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 507,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nPraf = Event(\"Praf\", [\"Vank\"])\nVank = Event(\"Vank\", [\"Scud\"])\nScud = Event(\"Scud\", [\"Wrenk\"])\nWrenk = Event(\"Wrenk\", [\"Yobb\", \"Spog\"])\nYobb = Event(\"Yobb\", [\"Glim\", \"Spog\"])\nSpog = Event(\"Spog\", [\"Klep\"])\nGlim = Event(\"Glim\", [])\nKlep = Event(\"Klep\", [])\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occur()\n\ndef occur(event):\n    event.occurred = True\n\ndef reset():\n    for event in [Praf, Vank, Scud, Wrenk, Yobb, Spog, Glim, Klep]:\n        event.occurred = False\n\nreset()\noccur(Praf)\noccur(Vank)\nwould_klep_occur = occur(not Praf) and occur(not Vank) and occur(Scud) and occur(Wrenk) and not occur(Yobb)\noccur(Klep) if would_klep_occur else None\nsimulate([Praf, Vank, Scud, Wrenk, Yobb, Spog, Glim, Klep])\nprint(Klep.occurred)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "701",
+        "question": "Would Jext occur if not Fizo and not Blorn?",
+        "given_info": "We know that Fizo causes Blorn and Plim, Plim causes Quaz, Quaz cause not Skul, Skul causes Triv and Yex, Yex causes Jext.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 508,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect):\n        self.effect = effect\n        self.causes = []\n\n    def add_cause(self, cause):\n        self.causes.append(cause)\n\nclass Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\")\nPlim = Event(\"Plim\")\nQuaz = Event(\"Quaz\")\nSkul = Event(\"Skul\")\nTriv = Event(\"Triv\")\nYex = Event(\"Yex\")\nJext = Event(\"Jext\")\n\nFizo_causes = Cause(Blorn)\nFizo_causes.add_cause(Cause(Plim))\nPlim_causes = Cause(Quaz)\nQuaz_causes = Cause(not Skul)\nSkul_causes = Cause(Triv)\nSkul_causes.add_cause(Cause(Yex))\nYex_causes = Cause(Jext)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                cause.effect.occurred = True\n\nFizo.occurred = True\nBlorn.occurred = True\nsimulate([Fizo, Blorn])\n\nif not Jext.occurred:\n    answer = \"Jext would not occur\"\nelse:\n    answer = \"Jext would occur\"\n\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "901",
+        "question": "Would Wrox occur if not Nuv and not Splee?",
+        "given_info": "We know that Nuv causes Splee and Blen, Blen causes Druk, Druk cause not Plog, Plog causes Skrim and Zimb, Zimb causes Wrox.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 509,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nNuv = Event(\"Nuv\", set([\"Splee\", \"Blen\"]))\nSplee = Event(\"Splee\", set())\nBlen = Event(\"Blen\", set([\"Druk\"]))\nDruk = Event(\"Druk\", set([\"Plog\"]))\nPlog = Event(\"Plog\", set([\"Skrim\", \"Zimb\"]))\nSkrim = Event(\"Skrim\", set())\nZimb = Event(\"Zimb\", set([\"Wrox\"]))\nWrox = Event(\"Wrox\", set())\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occurred = True\n\ndef counterfactual(events, event_to_remove):\n    events[event_to_remove.name].occurred = False\n    simulate(events)\n\ndef check_event(event):\n    return event.occurred\n\nevents = {Nuv: False, Splee: False, Blen: False, Druk: False, Plog: False, Skrim: False, Zimb: False, Wrox: False}\nsimulate([Nuv])\nif not check_event(Splee) and not check_event(Blen):\n    counterfactual(events, Nuv)\n    if not check_event(Wrox):\n        return \"Wrox would not occur if not Nuv and not Splee.\"\nelse:\n    return \"Wrox would occur if not Nuv and not Splee.\"",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "102",
+        "question": "Would Lumbo occur if not Ziklo and not Blaf?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf and Ziklo together cause Trune, Trune causes Vork and Sline, Sline cause Lumbo.",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 510,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nZiklo = Event(\"Ziklo\")\nBlaf = Event(\"Blaf\")\nTrune = Event(\"Trune\")\nVork = Event(\"Vork\")\nSline = Event(\"Sline\")\nLumbo = Event(\"Lumbo\")\n\ndef simulate(events):\n    events_order = [\"Ziklo\", \"Blaf\", \"Trune\", \"Sline\", \"Lumbo\"]\n    for event in events_order:\n        if event in events and not events[event].occurred:\n            for cause in events[event].causes:\n                if cause not in events or events[cause].occurred:\n                    events[event].occurred = True\n                    for effect in events[event].causes:\n                        if effect not in events or events[effect].occurred:\n                            events[effect].occurred = True\n    return events[\"Lumbo\"].occurred\n\nresult = simulate({Ziklo: False, Blaf: False, Trune: False, Vork: False, Sline: False, Lumbo: False})\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "302",
+        "question": "Would Zlim occur if not Glent and not Razz?",
+        "given_info": "We know that Glent causes Razz, Razz and Glent together cause Pex, Pex causes Zurn and Melf, Melf cause Zlim.",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 511,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Glent\": Event(\"Glent\", {\"Razz\"}),\n            \"Razz\": Event(\"Razz\", {\"Glent\", \"Pex\"}),\n            \"Pex\": Event(\"Pex\", {\"Razz\", \"Glent\", \"Zurn\", \"Melf\"}),\n            \"Zurn\": Event(\"Zurn\", {\"Pex\"}),\n            \"Melf\": Event(\"Melf\", {\"Pex\", \"Zlim\"}),\n            \"Zlim\": Event(\"Zlim\", {\"Melf\"})\n        }\n\n    def simulate(self, event_names):\n        for event_name in event_names:\n            event = self.events[event_name]\n            event.occurred = True\n            for cause in event.causes:\n                self.events[cause].occurred = True\n\n        return any(event.name == \"Zlim\" and event.occurred for event in self.events.values())\n\nworld = World()\nworld.simulate([\"Glent\", \"Razz\"])\nresult = not world.simulate([\"Glent\", \"Razz\"])\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "502",
+        "question": "Would Klep occur if not Praf and not Vank?",
+        "given_info": "We know that Praf causes Vank, Vank and Praf together cause Scud, Scud causes Wrenk and Yobb, Yobb cause Klep.",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 512,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nPraf = Event('Praf', {'Vank'})\nVank = Event('Vank', {'Scud'})\nScud = Event('Scud', {'Wrenk', 'Yobb'})\nWrenk = Event('Wrenk', {})\nYobb = Event('Yobb', {'Klep'})\nKlep = Event('Klep', {})\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occur()\n\ndef occur(event):\n    event.occurred = True\n\ndef reset():\n    for event in [Praf, Vank, Scud, Wrenk, Yobb, Klep]:\n        event.occurred = False\n\nreset()\noccur(Praf)\noccur(Vank)\noccurred_klep = occur(Klep)\n\nif not occurred_klep:\n    print(\"No, Klep would not occur if not Praf and not Vank.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "702",
+        "question": "Would Jext occur if not Fizo and not Blorn?",
+        "given_info": "We know that Fizo causes Blorn, Blorn and Fizo together cause Plim, Plim causes Quaz and Skul, Skul cause Jext.",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 513,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.occurred = False\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\")\nPlim = Event(\"Plim\")\nQuaz = Event(\"Quaz\")\nSkul = Event(\"Skul\")\nJext = Event(\"Jext\")\n\nFizo.causes.add(Blorn)\nBlorn.causes.add(Plim)\nPlim.causes.add(Quaz)\nPlim.causes.add(Skul)\nSkul.causes.add(Jext)\n\ndef simulate(events):\n    events_order = list(reversed(sorted(events, key=lambda x: len(x.causes))))\n    for event in events_order:\n        if not event.occurred and all([e.occured for e in event.causes]):\n            event.occurred = True\n            for cause in event.causes:\n                if cause in events_order:\n                    events_order.remove(cause)\n    return all([event.occurred for event in events])\n\nsimulate([Fizo, Blorn, Plim, Quaz, Skul, Jext])",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "902",
+        "question": "Would Wrox occur if not Nuv and not Splee?",
+        "given_info": "We know that Nuv causes Splee, Splee and Nuv together cause Blen, Blen causes Druk and Plog, Plog cause Wrox.",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 514,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.is_caused_by = []\n\nNuv = Event(\"Nuv\")\nSplee = Event(\"Splee\")\nBlen = Event(\"Blen\")\nDruk = Event(\"Druk\")\nPlog = Event(\"Plog\")\nWrox = Event(\"Wrox\")\n\nNuv.causes.append(Splee)\nSplee.causes.append(Blen)\nBlen.causes.append(Druk)\nBlen.causes.append(Plog)\nPlog.causes.append(Wrox)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                if not cause.occurred:\n                    cause.occurred = True\n                if not any([cause.occurred for c in cause.causes]):\n                    event.occurred = False\n\nsimulate([Nuv, Splee])\nif not Wrox.occurred:\n    answer = \"Wrox would not occur\"\nelse:\n    answer = \"Wrox would occur\"\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "103",
+        "question": "Would Lumbo occur if not Ziklo and not Blaf?",
+        "given_info": "We know that Ziklo causes Blaf and Trune, Blaf and Trune together cause not Vork, Vork causes not Sline and not Frim, Frim causes Lumbo. ",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 515,
+            "graph_id": "graph7"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=None, caused_by=None, causes=None):\n        self.name = name\n        self.causes_not = causes_not if isinstance(causes_not, set) else set([causes_not])\n        self.caused_by = caused_by if isinstance(caused_by, set) else set([caused_by])\n        self.causes = causes if isinstance(causes, set) else set(causes)\n\nZiklo = Event(\"Ziklo\")\nBlaf = Event(\"Blaf\")\nTrune = Event(\"Trune\")\nVork = Event(\"Vork\")\nSline = Event(\"Sline\")\nFrim = Event(\"Frim\")\nLumbo = Event(\"Lumbo\")\n\nZiklo.caused_by.update([Blaf, Trune])\nBlaf.caused_by.update([Ziklo, Trune])\nTrune.caused_by.update([Ziklo, Blaf])\nBlaf.causes.add(Vork)\nTrune.causes.add(Vork)\nVork.causes.add(Sline)\nVork.causes.add(Frim)\nFrim.causes.add(Lumbo)\n\ndef counterfactual(event, events_to_remove):\n    for event_to_remove in events_to_remove:\n        event.causes_not.update(event_to_remove.causes)\n        event.caused_by.discard(event_to_remove)\n\ncounterfactual(Lumbo, {Ziklo, Blaf})\n\nif not Lumbo.causes and not Lumbo.caused_by:\n    result = \"Lumbo would not occur\"\nelse:\n    result = \"Lumbo would occur\"\n\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "303",
+        "question": "Would Zlim occur if not Glent and not Razz?",
+        "given_info": "We know that Glent causes Razz and Pex, Razz and Pex together cause not Zurn, Zurn causes not Melf and not Crip, Crip causes Zlim. ",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 516,
+            "graph_id": "graph7"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=None, caused_by=None):\n        self.name = name\n        self.causes_not = set(causes_not) if causes_not else set()\n        self.caused_by = set(caused_by) if caused_by else set()\n\nglent = Event(\"Glent\")\nrazz = Event(\"Razz\")\npex = Event(\"Pex\")\nzurn = Event(\"Zurn\")\nmelf = Event(\"Melf\")\ncrip = Event(\"Crip\")\nzlim = Event(\"Zlim\")\n\nglent.caused_by.update([razz, pex])\nrazz.caused_by.update([pex])\nrazz.causes_not.add(zurn)\npex.causes_not.add(zurn)\nzurn.causes_not.update([melf, crip])\ncrip.causes = zlim\n\ndef simulate(events):\n    event_occurrences = {event: False for event in events}\n    for event in events:\n        if not event_occurrences[event]:\n            for cause in events - {event}:\n                if event in event.causes_not or cause in event.caused_by:\n                    event_occurrences[event] = True\n                    break\n    return event_occurrences[zlim]\n\nresult = simulate({glent, razz})\nprint(not result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "503",
+        "question": "Would Klep occur if not Praf and not Vank?",
+        "given_info": "We know that Praf causes Vank and Scud, Vank and Scud together cause not Wrenk, Wrenk causes not Yobb and not Glim, Glim causes Klep. ",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 517,
+            "graph_id": "graph7"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=None, caused_by=None, causes=None):\n        self.name = name\n        self.causes_not = causes_not if causes_not else set()\n        self.caused_by = caused_by if caused_by else set()\n        self.causes = causes if causes else set()\n\nPraf = Event(\"Praf\", caused_by={\"Vank\", \"Scud\"}, causes={\"Vank\", \"Scud\"})\nVank = Event(\"Vank\", caused_by={\"Scud\"}, causes={\"Scud\", \"Wrenk\"})\nScud = Event(\"Scud\", causes={\"Wrenk\"})\nWrenk = Event(\"Wrenk\", causes_not={\"Yobb\", \"Glim\"})\nYobb = Event(\"Yobb\", caused_by=Wrenk)\nGlim = Event(\"Glim\", caused_by=Wrenk, causes={\"Klep\"})\nKlep = Event(\"Klep\")\n\ndef simulate(events):\n    event_occurrences = {event.name: False for event in events}\n\n    for event in events:\n        if not event_occurrences[event.name]:\n            for cause in event.causes:\n                event_occurrences[cause.name] = False\n            for effect in event.causes_not:\n                event_occurrences[effect.name] = True\n\n    return event_occurrences[\"Klep\"]\n\nprint(simulate([Praf, Vank, Scud, Wrenk, Yobb, Glim, Klep]))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "703",
+        "question": "Would Jext occur if not Fizo and not Blorn?",
+        "given_info": "We know that Fizo causes Blorn and Plim, Blorn and Plim together cause not Quaz, Quaz causes not Skul and not Triv, Triv causes Jext. ",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 518,
+            "graph_id": "graph7"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=[], caused_by=[]):\n        self.name = name\n        self.causes_not = causes_not\n        self.caused_by = caused_by\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\")\nPlim = Event(\"Plim\")\nQuaz = Event(\"Quaz\")\nSkul = Event(\"Skul\")\nTriv = Event(\"Triv\")\nJext = Event(\"Jext\")\n\nFizo.caused_by = [Blorn, Plim]\nBlorn.caused_by = [Plim]\nPlim.caused_by = []\nQuaz.causes_not = [Skul, Triv]\nTriv.causes = Jext\n\ndef simulate(events):\n    results = {}\n    for event in events:\n        if event not in results:\n            results[event] = True\n        else:\n            for cause in event.caused_by:\n                if not results[cause]:\n                    results[event] = False\n            for effect in event.causes_not:\n                if results[effect]:\n                    results[event] = False\n    return results\n\nresult = simulate([Fizo, Blorn])\nif \"Jext\" not in result:\n    print(\"Jext would not occur.\")\nelse:\n    print(\"Jext would occur.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "903",
+        "question": "Would Wrox occur if not Nuv and not Splee?",
+        "given_info": "We know that Nuv causes Splee and Blen, Splee and Blen together cause not Druk, Druk causes not Plog and not Skrim, Skrim causes Wrox. ",
+        "true_answer": "no",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 519,
+            "graph_id": "graph7"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes, affected_by):\n        self.name = name\n        self.causes = set(causes)\n        self.affected_by = set(affected_by)\n\nNuv = Event(\"Nuv\", {\"Splee\", \"Blen\"}, {})\nSplee = Event(\"Splee\", {\"Blen\"}, {\"Druk\"})\nBlen = Event(\"Blen\", {}, {\"Druk\"})\nDruk = Event(\"Druk\", {Splee, Blen}, {\"Plog\", \"Skrim\"})\nPlog = Event(\"Plog\", {}, {\"Druk\"})\nSkrim = Event(\"Skrim\", {Druk}, {})\nSkrim.affected_by.add(\"Wrox\")\n\ndef no_event(event):\n    return Event(event.name, set(), {event.name})\n\ndef counterfactual(events):\n    counter = {}\n    for event in events:\n        counter[event.name] = no_event(event)\n    return counter\n\ndef would_occur(event, counterfactual_events):\n    for event_name, counter_event in counterfactual_events.items():\n        if event_name in event.causes:\n            if event_name != event.name and counter_event.name != event.name:\n                return False\n    return not event.name in counterfactual_events\n\ndef main():\n    events = {Nuv, Splee, Blen, Druk, Plog, Skrim}\n    counterfactual_events = counterfactual({Nuv, Splee})\n    result = would_occur(Skrim, counterfactual_events)\n    print(result)\n\nmain()",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "104",
+        "question": "Would Lumbo occur if not Ziklo and not Blaf?",
+        "given_info": "We know that Ziklo causes Blaf and Trune, Blaf and Trune together cause not Vork, Vork causes Sline, Sline causes Lumbo.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 520,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nclass Scenario:\n    def __init__(self, events):\n        self.events = {event.name: event for event in events}\n\n    def occur(self, event_name):\n        event = self.events[event_name]\n        event.occurred = True\n        for cause in event.causes:\n            if cause in self.events and not self.events[cause].occurred:\n                self.events[cause].occur()\n\n    def would_occur(self, event_name):\n        new_scenario = Scenario([Event(name, []) for name in self.events])\n        new_scenario.occur(event_name)\n        return new_scenario.events['Lumbo'].occurred\n\nZiklo = Event('Ziklo', ['Blaf', 'Trune'])\nBlaf = Event('Blaf', ['Trune', 'Vork'])\nTrune = Event('Trune', ['Blaf'])\nVork = Event('Vork', ['Sline'])\nSline = Event('Sline', ['Lumbo'])\nLumbo = Event('Lumbo', [])\n\nscenario = Scenario([Ziklo, Blaf, Trune, Vork, Sline, Lumbo])\n\nif not scenario.would_occur('Ziklo') and not scenario.would_occur('Blaf'):\n    print(\"Lumbo would not occur\")\nelse:\n    print(\"Lumbo would occur\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "304",
+        "question": "Would Zlim occur if not Glent and not Razz?",
+        "given_info": "We know that Glent causes Razz and Pex, Razz and Pex together cause not Zurn, Zurn causes Melf, Melf causes Zlim.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 521,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None, caused_by=None):\n        self.name = name\n        self.causes = causes if causes else []\n        self.caused_by = caused_by if caused_by else []\n\nevents = {\n    \"Glent\": Event(\"Glent\", causes=[\"Razz\", \"Pex\"]),\n    \"Razz\": Event(\"Razz\", causes=[\"Pex\"], caused_by=[\"Glent\"]),\n    \"Pex\": Event(\"Pex\", causes=[\"Razz\"], caused_by=[\"Glent\"]),\n    \"Zurn\": Event(\"Zurn\", caused_by=[\"Razz\", \"Pex\"]),\n    \"Melf\": Event(\"Melf\", caused_by=[\"Zurn\"]),\n    \"Zlim\": Event(\"Zlim\", caused_by=[\"Melf\"])\n}\n\ndef is_event_possible(event_name, preconditions=None):\n    event = events[event_name]\n    if not preconditions:\n        return all([not e in events for e in event.caused_by])\n    else:\n        return all([not e in events for e in event.caused_by if e not in preconditions])\n\ndef counterfactual_scenario(event_to_remove, additional_removals=None):\n    preconditions = [events[event_to_remove]]\n    if additional_removals:\n        preconditions += [events[r] for r in additional_removals]\n    return [e for e in events.values() if all([not e in preconditions])]\n\ndef determine_answer():\n    return not is_event_possible(\"Zlim\", counterfactual_scenario(\"Glent\", [\"Razz\"]))\n\ndetermine_answer()",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "504",
+        "question": "Would Klep occur if not Praf and not Vank?",
+        "given_info": "We know that Praf causes Vank and Scud, Vank and Scud together cause not Wrenk, Wrenk causes Yobb, Yobb causes Klep.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 522,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.affected_by = set()\n\nclass World:\n    def __init__(self):\n        self.events = {\n            \"Praf\": Event(\"Praf\", {\"Vank\", \"Scud\"}),\n            \"Vank\": Event(\"Vank\", {\"Scud\", \"Wrenk\"}),\n            \"Scud\": Event(\"Scud\", {\"Wrenk\"}),\n            \"Wrenk\": Event(\"Wrenk\", {\"Yobb\"}),\n            \"Yobb\": Event(\"Yobb\", {\"Klep\"})\n        }\n\n    def simulate(self, events_to_occur):\n        for event in events_to_occur:\n            for cause in self.events[event].causes:\n                self.events[cause].affected_by.add(event)\n\n        affected_by_none = {event for event in self.events if len(event.affected_by) == 0}\n        return \"Klep\" in affected_by_none if events_to_occur == {\"Praf\", \"Vank\"} else \"No, Klep would not occur.\"\n\nworld = World()\nworld.simulate({\"Praf\", \"Vank\"})\nprint(world.simulate({\"Praf\", \"Vank\"}))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "704",
+        "question": "Would Jext occur if not Fizo and not Blorn?",
+        "given_info": "We know that Fizo causes Blorn and Plim, Blorn and Plim together cause not Quaz, Quaz causes Skul, Skul causes Jext.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 523,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nFizo = Event(\"Fizo\", {\"Blorn\", \"Plim\"})\nBlorn = Event(\"Blorn\", {\"Plim\", \"Quaz\"})\nPlim = Event(\"Plim\", {\"Blorn\", \"Quaz\"})\nQuaz = Event(\"Quaz\", {\"Skul\"})\nSkul = Event(\"Skul\", {})\nJext = Event(\"Jext\", set())\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occurred = True\n\ndef counterfactual(events, event_to_remove):\n    events[event_to_remove].occurred = False\n    simulate(events)\n    return not any([event.occurred for event in events if event.name != \"Jext\"])\n\nsimulate({Fizo, Blorn, Plim, Quaz, Skul, Jext})\nif not counterfactual({Fizo, Blorn, Plim, Quaz, Skul, Jext}, Fizo):\n    print(\"Jext would occur if not Fizo and not Blorn.\")\nelse:\n    print(\"Jext would not occur if not Fizo and not Blorn.\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "904",
+        "question": "Would Wrox occur if not Nuv and not Splee?",
+        "given_info": "We know that Nuv causes Splee and Blen, Splee and Blen together cause not Druk, Druk causes Plog, Plog causes Wrox.",
+        "true_answer": "yes",
+        "type": "joint",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 524,
+            "graph_id": "graph6"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name):\n        self.name = name\n        self.occurred = False\n        self.causes = []\n        self.is_caused_by = []\n\nNuv = Event(\"Nuv\")\nSplee = Event(\"Splee\")\nBlen = Event(\"Blen\")\nDruk = Event(\"Druk\")\nPlog = Event(\"Plog\")\nWrox = Event(\"Wrox\")\n\nNuv.causes.append(Splee)\nNuv.causes.append(Blen)\nSplee.causes.append(Blen)\nDruk.causes.append(Plog)\nPlog.causes.append(Wrox)\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                if not cause.occurred:\n                    cause.occurred = True\n                    simulate(events)\n                    cause.occurred = False\n\ndef evaluate(events):\n    simulate([Nuv, Splee])\n    if Wrox.occurred:\n        return \"Wrox would occur\"\n    else:\n        return \"Wrox would not occur\"\n\nprint(evaluate([Nuv, Splee]))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "150",
+        "question": "Assume not Ziklo, and based on this assumption, further suppose not Sline. Would Lumbo occur?",
+        "given_info": "We know that Ziklo causes Blaf, Trune and Vork, not Vork causes Sline, Sline causes Frim, Frim or Vork causes Qado, Qado causes Jurf, and Jurf causes Lumbo.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 750,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Ziklo': {'Blaf', 'Trune', 'Vork'},\n    'Blaf': set(),\n    'Trune': set(),\n    'Vork': {'Sline', 'Frim'},\n    'Sline': {'Frim', 'Vork'},\n    'Frim': {'Vork', 'Qado'},\n    'Qado': {'Jurf'},\n    'Jurf': {'Lumbo'}\n}\n\ndef simulate(events):\n    for event in events:\n        event_obj = Events[event]\n        event_obj.occurred = True\n        for cause in event_obj.causes:\n            events[cause].occurred = True\n            simulate(events)\n            events[cause].occurred = False\n\ndef not_occur(event, events):\n    events[event].occurred = False\n\ndef check_lumbo(events):\n    not_occur('Ziklo', events)\n    not_occur('Sline', events)\n    simulate(events)\n    return events['Lumbo'].occurred\n\nprint(check_lumbo(events))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "350",
+        "question": "Assume not Glent, and based on this assumption, further suppose not Melf. Would Zlim occur?",
+        "given_info": "We know that Glent causes Razz, Pex and Zurn, not Zurn causes Melf, Melf causes Crip, Crip or Zurn causes Flen, Flen causes Tork, and Tork causes Zlim.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 751,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Glent': {'Razz', 'Pex', 'Zurn'},\n    'Razz': set(),\n    'Pex': set(),\n    'Zurn': {'Crip', 'Flen'},\n    'Crip': {'Zlim'},\n    'Flen': {'Tork'},\n    'Tork': {'Zlim'},\n    'Melf': {'Crip'},\n    'Zlim': set()\n}\n\ndef simulate(events, assumptions):\n    for event, causes in events.items():\n        if event not in assumptions:\n            if event == 'Glent':\n                events['Glent'].remove('Melf')\n            if event in causes:\n                events[causes.pop(events[causes].index(event))].occurred = True\n                for effect in events[causes.pop()]:\n                    events[effect].add(event)\n    return events['Zlim'].occurred\n\nassumptions = {'Glent', 'Melf'}\nprint(simulate(events, assumptions))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "550",
+        "question": "Assume not Praf, and based on this assumption, further suppose not Yobb. Would Klep occur?",
+        "given_info": "We know that Praf causes Vank, Scud and Wrenk, not Wrenk causes Yobb, Yobb causes Glim, Glim or Wrenk causes Spog, Spog causes Torb, and Torb causes Klep.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 752,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, causes):\n        self.effect = effect\n        self.causes = set(causes)\n        self.occurred = False\n\nclass Scenario:\n    def __init__(self):\n        self.events = {\n            \"Praf\": Cause(\"Vank\", {\"Praf\", \"Scud\", \"Wrenk\"}),\n            \"Scud\": Cause(\"Vank\", {\"Praf\", \"Scud\"}),\n            \"Wrenk\": Cause(\"Vank\", {\"Praf\", \"Wrenk\"}),\n            \"Wrenk_not_causing_Yobb\": Cause(\"not Yobb\", {\"Wrenk\"}),\n            \"Yobb\": Cause(\"Glim\", {\"Yobb\"}),\n            \"Glim\": Cause(\"Spog\", {\"Glim\", \"Wrenk\"}),\n            \"Spog\": Cause(\"Torb\", {\"Spog\"}),\n            \"Torb\": Cause(\"Klep\", {\"Torb\"})\n        }\n\n    def simulate(self, sequence):\n        for event in sequence:\n            if event in self.events:\n                self.events[event].occurred = True\n                for cause in self.events[event].causes - {event}:\n                    if cause not in self.events or not self.events[cause].occurred:\n                        self.events[event].occurred = False\n                        break\n        return not self.events[\"Klep\"].occurred\n\nscenario = Scenario()\nsequence = [\"Praf\", \"Scud\", \"Wrenk\", \"Wrenk_not_causing_Yobb\"]\nprint(scenario.simulate(sequence))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "750",
+        "question": "Assume not Fizo, and based on this assumption, further suppose not Skul. Would Jext occur?",
+        "given_info": "We know that Fizo causes Blorn, Plim and Quaz, not Quaz causes Skul, Skul causes Triv, Triv or Quaz causes Yex, Yex causes Rild, and Rild causes Jext.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 753,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nFizo = Event(\"Fizo\", set([\"Blorn\", \"Plim\", \"Quaz\"]))\nBlorn = Event(\"Blorn\", set())\nPlim = Event(\"Plim\", set())\nQuaz = Event(\"Quaz\", set([\"Triv\", \"Quaz\", \"Skul\"]))\nSkul = Event(\"Skul\", set([\"Triv\", \"Quaz\", \"Jext\"]))\nTriv = Event(\"Triv\", set([\"Quaz\", \"Yex\", \"Jext\"]))\nYex = Event(\"Yex\", set([\"Triv\", \"Rild\"]))\nRild = Event(\"Rild\", set([\"Yex\", \"Jext\"]))\nJext = Event(\"Jext\", set())\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occurred = True\n\ndef no_event(event):\n    event.occurred = False\n\ndef assume_not(event):\n    no_event(event)\n    for cause in event.causes:\n        no_event(cause)\n\ndef run_scenario(events):\n    assume_not(Fizo)\n    assume_not(Skul)\n    simulate([Fizo, Skul])\n    return Jext.occurred\n\nprint(run_scenario({Fizo, Blorn, Plim, Quaz, Skul, Triv, Yex, Rild, Jext}))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "950",
+        "question": "Assume not Nuv, and based on this assumption, further suppose not Plog. Would Wrox occur?",
+        "given_info": "We know that Nuv causes Splee, Blen and Druk, not Druk causes Plog, Plog causes Skrim, Skrim or Druk causes Zimb, Zimb causes Yurd, and Yurd causes Wrox.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 754,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nNuv = Event(\"Nuv\", set([\"Splee\", \"Blen\", \"Druk\"]))\nSplee = Event(\"Splee\", set())\nBlen = Event(\"Blen\", set())\nDruk = Event(\"Druk\", set())\nPlog = Event(\"Plog\", { \"Skrim\" })\nSkrim = Event(\"Skrim\", { \"Druk\", \"Skrim\" })\nDruk_new = Event(\"Druk_new\", { \"Zimb\" })\nZimb = Event(\"Zimb\", { \"Yurd\" })\nYurd = Event(\"Yurd\", { \"Wrox\" })\nWrox = Event(\"Wrox\", set())\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occurred = True\n\ndef counterfactual(events, event_to_remove):\n    events[event_to_remove.name].occurred = False\n    simulate(events.values())\n    return events[\"Wrox\"].occurred\n\nevents = {Nuv.name: Nuv, Splee.name: Splee, Blen.name: Blen, Druk.name: Druk, Plog.name: Plog, Skrim.name: Skrim, Druk_new.name: Druk_new, Zimb.name: Zimb, Yurd.name: Yurd, Wrox.name: Wrox}\n\nNuv.occurred = False\nPlog.occurred = False\n\nresult = not counterfactual(events, Wrox)\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "151",
+        "question": "Assume not Ziklo, and based on this assumption, further suppose not Trune. Would Lumbo occur?",
+        "given_info": "We know that Ziklo causes Blaf, Trune and Vork, not Vork causes Sline, Sline causes Frim, Frim causes Qado, Qado causes Jurf, and Jurf causes Lumbo.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 755,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Ziklo': set(['Blaf', 'Trune', 'Vork']),\n    'Trune': set(['Vork']),\n    'Vork': set([]),\n    'Sline': set(['Frim']),\n    'Frim': set(['Qado']),\n    'Qado': set(['Jurf']),\n    'Jurf': set(['Lumbo'])\n}\n\ndef simulate(events):\n    for event in events:\n        if not events[event].occurred:\n            for cause in events[event].causes:\n                if not events[cause].occurred:\n                    events[cause].occurred = True\n                    simulate(events)\n                    events[cause].occurred = False\n\ndef not_occur(event, events):\n    events[event].occurred = False\n\ndef check_lumbo(events):\n    not_occur('Ziklo', events)\n    not_occur('Trune', events)\n    simulate(events)\n    return events['Lumbo'].occurred\n\nprint(check_lumbo(events))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "351",
+        "question": "Assume not Glent, and based on this assumption, further suppose not Pex. Would Zlim occur?",
+        "given_info": "We know that Glent causes Razz, Pex and Zurn, not Zurn causes Melf, Melf causes Crip, Crip causes Flen, Flen causes Tork, and Tork causes Zlim.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 756,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Glent': {'Razz', 'Pex', 'Zurn'},\n    'Razz': {},\n    'Pex': {'Zurn'},\n    'Zurn': {},\n    'Melf': {'Melf'},\n    'Melf': {'Crip'},\n    'Crip': {'Flen'},\n    'Flen': {'Tork'},\n    'Tork': {'Zlim'},\n    'Zlim': {}\n}\n\ndef simulate(events, initial_events):\n    for event in initial_events:\n        events[event].occurred = True\n\n    for event in events:\n        if events[event].occurred:\n            for cause in events[event].causes:\n                if not events[cause].occurred:\n                    events[cause].occurred = True\n                    simulate(events, {event})\n\nsimulate(events, {'Glent'})\nevents['Glent'].occurred = False\nevents['Pex'].occurred = False\nsimulate(events, {'Glent', 'Pex'})\n\nif events['Zlim'].occurred:\n    result = \"Zlim occurs\"\nelse:\n    result = \"Zlim does not occur\"\n\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "551",
+        "question": "Assume not Praf, and based on this assumption, further suppose not Scud. Would Klep occur?",
+        "given_info": "We know that Praf causes Vank, Scud and Wrenk, not Wrenk causes Yobb, Yobb causes Glim, Glim causes Spog, Spog causes Torb, and Torb causes Klep.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 757,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, causes):\n        self.effect = effect\n        self.causes = set(causes)\n        self.occurred = False\n\nclass Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\ndef create_relationships(given_info):\n    relationships = {}\n    for info in given_info.split(\",\"):\n        cause, effect = info.strip().split(\" \")\n        if effect not in relationships:\n            relationships[effect] = set()\n        relationships[effect].add(cause)\n        relationships[cause] = Cause(effect, {cause})\n    return relationships\n\ndef simulate(relationships, sequence):\n    for event in sequence:\n        if event in relationships:\n            if event.occurred:\n                continue\n            for cause in relationships[event].causes:\n                if not cause.occurred:\n                    return False\n            relationships[event].occurred = True\n    return True if relationships[\"Klep\"].occurred else False\n\nrelationships = create_relationships(\"Praf causes Vank, Scud and Wrenk, not Wrenk causes Yobb, Yobb causes Glim, Glim causes Spog, Spog causes Torb, and Torb causes Klep\")\nsequence = [\"not Praf\", \"not Scud\"]\nprint(simulate(relationships, sequence))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "751",
+        "question": "Assume not Fizo, and based on this assumption, further suppose not Plim. Would Jext occur?",
+        "given_info": "We know that Fizo causes Blorn, Plim and Quaz, not Quaz causes Skul, Skul causes Triv, Triv causes Yex, Yex causes Rild, and Rild causes Jext.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 758,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nFizo = Event(\"Fizo\", set([\"Blorn\", \"Plim\", \"Quaz\"]))\nBlorn = Event(\"Blorn\", set([\"Plim\", \"Quaz\", \"Skul\"]))\nPlim = Event(\"Plim\", set([\"Quaz\", \"Skul\", \"Triv\"]))\nQuaz = Event(\"Quaz\", set([\"Skul\"]))\nSkul = Event(\"Skul\", set([\"Triv\", \"Rild\"]))\nTriv = Event(\"Triv\", set([\"Rild\", \"Yex\"]))\nYex = Event(\"Yex\", set([\"Rild\", \"Jext\"]))\nRild = Event(\"Rild\", set([\"Jext\"]))\nJext = Event(\"Jext\", set())\n\ndef simulate(events):\n    for event in events:\n        if event.occurred:\n            for cause in event.causes:\n                events[cause].occurred = True\n\ndef assume_not(event, events):\n    events[event.name].occurred = False\n    events[event.name].occurred = False\n\ndef run_scenario(events, assumptions):\n    for assumption in assumptions:\n        assume_not(assumptions[0], events)\n        for event in assumptions[1:]:\n            assume_not(event, events)\n        simulate(events)\n        if not events[\"Jext\"].occurred:\n            return False\n    return True\n\nevents = {Fizo.name: Fizo, Blorn.name: Blorn, Plim.name: Plim, Quaz.name: Quaz, Skul.name: Skul, Triv.name: Triv, Yex.name: Yex, Rild.name: Rild, Jext.name: Jext}\nrun_scenario(events, [(Fizo, Plim)])",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "951",
+        "question": "Assume not Nuv, and based on this assumption, further suppose not Blen. Would Wrox occur?",
+        "given_info": "We know that Nuv causes Splee, Blen and Druk, not Druk causes Plog, Plog causes Skrim, Skrim causes Zimb, Zimb causes Yurd, and Yurd causes Wrox.",
+        "true_answer": "yes",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 759,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Nuv': {'Splee', 'Blen', 'Druk'},\n    'Splee': None,\n    'Blen': {'Druk'},\n    'Druk': None,\n    'Plog': {'Skrim'},\n    'Skrim': {'Zimb'},\n    'Zimb': {'Yurd'},\n    'Yurd': {'Wrox'}\n}\n\ndef simulate(event, events):\n    for cause in events[event].causes:\n        if not events[cause].occurred:\n            return False\n    events[event].occurred = True\n    return True\n\ndef counterfactual(event, events):\n    for event_name in events:\n        events[event_name].occurred = False\n    return not simulate(event, events)\n\ndef answer_question(events):\n    return not simulate('Nuv', events) and not simulate('Blen', events) and not counterfactual('Nuv', events) and not counterfactual('Blen', events) and counterfactual('Nuv', {'Nuv': False, 'Blen': False}) and counterfactual('Blen', {'Nuv': False, 'Blen': False}) and counterfactual('Nuv', {'Nuv': False, 'Blen': False, 'Druk': True}) and counterfactual('Blen', {'Nuv': False, 'Blen': False, 'Druk': True}) and counterfactual('Nuv', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True}) and counterfactual('Blen', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True}) and counterfactual('Nuv', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True, 'Skrim': True}) and counterfactual('Blen', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True, 'Skrim': True}) and counterfactual('Nuv', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True, 'Skrim': True, 'Zimb': True}) and counterfactual('Blen', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True, 'Skrim': True, 'Zimb': True}) and counterfactual('Nuv', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True, 'Skrim': True, 'Zimb': True, 'Yurd': True}) and counterfactual('Blen', {'Nuv': False, 'Blen': False, 'Druk': True, 'Plog': True, 'Skrim': True, 'Zimb': True, 'Yurd': True})\n\nevents = {event_name: Event(event_name, causes) for event_name, causes in events.items()}\nprint(answer_question(events))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "152",
+        "question": "Assume not Ziklo, and based on this assumption, further suppose not Sline. Would Lumbo occur?",
+        "given_info": "We know that Ziklo causes Blaf and Trune, Trune causes Vork, Vork causes Sline, Sline causes Frim, Frim causes Qado and Jurf, and Jurf causes Lumbo.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 760,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Ziklo': Cause('Ziklo', {'Blaf', 'Trune'}),\n    'Blaf': Cause('Blaf', {}),\n    'Trune': Cause('Trune', {'Vork'}),\n    'Vork': Cause('Vork', {'Sline', 'Lumbo'}),\n    'Sline': Cause('Sline', {'Frim'}),\n    'Frim': Cause('Frim', {'Qado', 'Jurf'}),\n    'Qado': Cause('Qado', {}),\n    'Jurf': Cause('Jurf', {'Lumbo'}),\n    'Lumbo': Cause('Lumbo', {})\n}\n\ndef simulate(event, events):\n    for cause, effect in events[event].causes.items():\n        if effect not in events:\n            events[effect] = Cause(effect, {event})\n        events[effect].occurred = True\n        simulate(cause, events)\n\ndef not_occur(event, events):\n    events[event].occurred = False\n\ndef would_occur(event, events):\n    not_occur(event, events)\n    for cause in events[event].causes:\n        if events[cause].occurred:\n            return would_occur(cause, events)\n    return events[event].occurred\n\nnot_occur('Ziklo', events)\nnot_occur('Sline', events)\nprint(would_occur('Lumbo', events))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "352",
+        "question": "Assume not Glent, and based on this assumption, further suppose not Melf. Would Zlim occur?",
+        "given_info": "We know that Glent causes Razz and Pex, Pex causes Zurn, Zurn causes Melf, Melf causes Crip, Crip causes Flen and Tork, and Tork causes Zlim.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 761,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Glent': set(['Razz', 'Pex']),\n    'Razz': set(),\n    'Pex': set(['Pex', 'Zurn']),\n    'Zurn': set(['Zurn', 'Melf']),\n    'Melf': set(['Melf', 'Crip', 'Tork']),\n    'Crip': set(['Crip', 'Flen', 'Tork']),\n    'Flen': set(['Flen', 'Tork']),\n    'Tork': set(['Tork', 'Zlim']),\n    'Zlim': set()\n}\n\ndef simulate(events, assumptions):\n    for event in events:\n        events[event].occurred = False\n\n    for event in assumptions:\n        events[event].occurred = False\n\n    for event in events:\n        if not events[event].occurred and events[event].causes:\n            for cause in events[event].causes:\n                if events[cause].occurred:\n                    events[event].occurred = True\n\n    return events['Zlim'].occurred\n\nprint(simulate(events, {'Glent', 'Melf'}))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "552",
+        "question": "Assume not Praf, and based on this assumption, further suppose not Yobb. Would Klep occur?",
+        "given_info": "We know that Praf causes Vank and Scud, Scud causes Wrenk, Wrenk causes Yobb, Yobb causes Glim, Glim causes Spog and Torb, and Torb causes Klep.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 762,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    \"Praf\": Cause(\"Praf\", {\"Vank\", \"Scud\"}),\n    \"Vank\": None,\n    \"Scud\": Cause(\"Scud\", {\"Wrenk\"}),\n    \"Wrenk\": Cause(\"Wrenk\", {\"Yobb\"}),\n    \"Yobb\": Cause(\"Yobb\", {\"Glim\"}),\n    \"Glim\": Cause(\"Glim\", {\"Spog\", \"Torb\"}),\n    \"Spog\": None,\n    \"Torb\": Cause(\"Torb\", {\"Klep\"}),\n    \"Klep\": None\n}\n\ndef simulate(event, events):\n    for cause, effect in events.items():\n        if event in events[cause].causes and not events[cause].occurred:\n            events[cause].occurred = True\n            if effect:\n                simulate(effect, events)\n\nsimulate(\"Praf\", events)\nevents[\"Wrenk\"].occurred = False\nsimulate(\"Yobb\", events)\nreturn not events[\"Klep\"].occurred",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "752",
+        "question": "Assume not Fizo, and based on this assumption, further suppose not Skul. Would Jext occur?",
+        "given_info": "We know that Fizo causes Blorn and Plim, Plim causes Quaz, Quaz causes Skul, Skul causes Triv, Triv causes Yex and Rild, and Rild causes Jext.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 763,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, causes):\n        self.effect = effect\n        self.causes = set(causes)\n        self.occurred = False\n\nFizo = Cause(\"Blorn\", {\"Fizo\"})\nPlim = Cause(\"Plim\", {\"Fizo\"})\nQuaz = Cause(\"Quaz\", {\"Plim\"})\nSkul = Cause(\"Skul\", {\"Quaz\"})\nTriv = Cause(\"Triv\", {\"Skul\"})\nTriv2 = Cause(\"Yex\", {\"Triv\"})\nTriv3 = Cause(\"Rild\", {\"Triv\"})\nRild = Cause(\"Jext\", {\"Rild\"})\n\ndef simulate(causes, assumptions):\n    for cause in causes:\n        if cause != \"Fizo\" and cause != \"Skul\":\n            if cause.effect not in assumptions:\n                for parent in cause.causes:\n                    if parent in assumptions:\n                        continue\n                    if parent.occurred:\n                        cause.occurred = True\n    for cause in causes:\n        if cause.effect == \"Jext\":\n            if not cause.occurred:\n                return False\n    return True\n\nsimulate([Fizo, Plim, Quaz, Skul, Triv, Triv2, Triv3, Rild], {\"Fizo\", \"Skul\"})",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "952",
+        "question": "Assume not Nuv, and based on this assumption, further suppose not Plog. Would Wrox occur?",
+        "given_info": "We know that Nuv causes Splee and Blen, Blen causes Druk, Druk causes Plog, Plog causes Skrim, Skrim causes Zimb and Yurd, and Yurd causes Wrox.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 764,
+            "graph_id": "graph9"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nevents = {\n    'Nuv': set(['Splee', 'Blen']),\n    'Splee': set(),\n    'Blen': set(['Druk']),\n    'Druk': set(['Plog']),\n    'Plog': set(['Skrim']),\n    'Skrim': set(['Zimb', 'Yurd']),\n    'Zimb': set(),\n    'Yurd': set(['Wrox']),\n    'Wrox': set()\n}\n\ndef simulate(events):\n    for event in events:\n        if events[event].occurred:\n            for cause in events[event].causes:\n                events[cause].occurred = True\n\ndef counterfactual(events, event_to_remove):\n    for event in events:\n        if event == event_to_remove:\n            events[event].occurred = False\n        else:\n            events[event].occurred = False\n            for cause in events[event].causes:\n                if events[cause].occurred:\n                    events[event].occurred = True\n                    break\n\ndef check_wrox(events):\n    return events['Wrox'].occurred\n\nevents = {key: Event(key, value) for key, value in events.items()}\nsimulate(events)\ncounterfactual(events, 'Nuv')\ncounterfactual(events, 'Plog')\nprint(not check_wrox(events))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "153",
+        "question": "Assume not Ziklo, and based on this assumption, further suppose not Sline. Would Lumbo occur?",
+        "given_info": "We know that Ziklo causes not Blaf, Blaf causes Trune, Trune causes not Vork, Vork or Trune causes Sline, Sline causes Frim, Frim causes Qado, and Qado causes Lumbo.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 765,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=None, caused_by=None):\n        self.name = name\n        self.causes_not = causes_not if causes_not else set()\n        self.caused_by = caused_by if caused_by else set()\n\nevents = {\n    'Ziklo': Event('Ziklo'),\n    'Blaf': Event('Blaf', caused_by={'Trune'}),\n    'Trune': Event('Trune', causes_not={'Vork'}, caused_by={'Sline'}),\n    'Vork': Event('Vork', caused_by={'Trune'}),\n    'Sline': Event('Sline', caused_by={'Frim'}),\n    'Frim': Event('Frim', caused_by={'Qado'}),\n    'Qado': Event('Qado', caused_by={'Lumbo'}),\n    'Lumbo': Event('Lumbo', caused_by={'Qado'})\n}\n\ndef simulate(events, assumptions):\n    event_chain = set()\n    for event in events.values():\n        if not event.name in assumptions:\n            event_chain.add(event.name)\n            for cause in event.caused_by:\n                if cause not in assumptions:\n                    event_chain.update(simulate(events, assumptions | {cause}))\n    return event_chain\n\nassumptions = {'Ziklo', 'Sline'}\nprint(not 'Lumbo' in simulate(events, assumptions))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "353",
+        "question": "Assume not Glent, and based on this assumption, further suppose not Melf. Would Zlim occur?",
+        "given_info": "We know that Glent causes not Razz, Razz causes Pex, Pex causes not Zurn, Zurn or Pex causes Melf, Melf causes Crip, Crip causes Flen, and Flen causes Zlim.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 766,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not=None, caused_by=None):\n        self.name = name\n        self.causes_not = causes_not if causes_not else set()\n        self.caused_by = caused_by if caused_by else set()\n\nevents = {\n    'Glent': set(),\n    'Razz': {'Glent'},\n    'Pex': {'Razz', 'Zurn'},\n    'Zurn': {'Pex'},\n    'Melf': {'Pex', 'Crip'},\n    'Crip': {'Melf', 'Flen'},\n    'Flen': {'Crip'},\n    'Zlim': {'Melf', 'Flen'}\n}\n\ndef simulate(events, assumptions):\n    for event, assumptions_set in assumptions.items():\n        if event in events:\n            events[event].causes_not.update(assumptions_set)\n\n    possible_chain = set()\n    for event in events:\n        if not events[event].causes_not and not events[event].caused_by:\n            possible_chain.add(event)\n\n    for event in possible_chain:\n        if event in events['Zlim']:\n            return True\n\n    return False\n\nassumptions = {'Glent': False, 'Melf': False}\nresult = simulate(events, assumptions)\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "553",
+        "question": "Assume not Praf, and based on this assumption, further suppose not Yobb. Would Klep occur?",
+        "given_info": "We know that Praf causes not Vank, Vank causes Scud, Scud causes not Wrenk, Wrenk or Scud causes Yobb, Yobb causes Glim, Glim causes Spog, and Spog causes Klep.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 767,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, causes):\n        self.effect = effect\n        self.causes = causes\n\ndef create_relationships(given_info):\n    relationships = {}\n    for info in given_info:\n        cause, effect, *causes = info.split('causes')\n        cause = cause.strip()\n        effect = effect.strip()\n        if effect not in relationships:\n            relationships[effect] = Cause(effect, [])\n        if cause:\n            relationships[effect].causes.append(cause)\n    return relationships\n\ndef model_scenario(relationships, scenario):\n    state = {key: False for key in relationships.keys()}\n    for step in scenario:\n        for key in state:\n            if key in relationships[step].causes:\n                state[key] = True\n    return state['Klep']\n\nrelationships = create_relationships([\"Praf causes not Vank\", \"Vank causes Scud\", \"Scud causes not Wrenk\", \"Wrenk or Scud causes Yobb\", \"Yobb causes Glim\", \"Glim causes Spog\", \"Spog causes Klep\"])\nscenario = [\"not Praf\", \"not Yobb\"]\nprint(model_scenario(relationships, scenario))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "753",
+        "question": "Assume not Fizo, and based on this assumption, further suppose not Skul. Would Jext occur?",
+        "given_info": "We know that Fizo causes not Blorn, Blorn causes Plim, Plim causes not Quaz, Quaz or Plim causes Skul, Skul causes Triv, Triv causes Yex, and Yex causes Jext.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 768,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, prerequisites=None):\n        self.effect = effect\n        self.prerequisites = prerequisites if prerequisites else []\n\ndef simulate(causes, assumptions):\n    state = {'Fizo': not assumptions['Fizo'], 'Blorn': False, 'Plim': False, 'Quaz': False, 'Skul': not assumptions['Skul'], 'Triv': False, 'Yex': False, 'Jext': False}\n\n    for cause in causes:\n        if all(state[prerequisite] for prerequisite in cause.prerequisites):\n            state[cause.effect] = True\n\n    return state['Jext']\n\ncauses = [\n    Cause('Fizo', []),\n    Cause('Blorn', []),\n    Cause('Plim', ['Blorn']),\n    Cause('Quaz', ['Plim']),\n    Cause('Skul', ['Plim']),\n    Cause('Triv', ['Skul']),\n    Cause('Yex', ['Triv']),\n    Cause('Jext', ['Yex'])\n]\n\nassumptions = {'Fizo': False, 'Skul': False}\n\nprint(simulate(causes, assumptions))",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "953",
+        "question": "Assume not Nuv, and based on this assumption, further suppose not Plog. Would Wrox occur?",
+        "given_info": "We know that Nuv causes not Splee, Splee causes Blen, Blen causes not Druk, Druk or Blen causes Plog, Plog causes Skrim, Skrim causes Zimb, and Zimb causes Wrox.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 769,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "yes",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes_not, caused_by):\n        self.name = name\n        self.causes_not = causes_not\n        self.caused_by = [caused_by]\n        self.occurred = False\n\nevents = {\n    \"Nuv\": Event(\"Nuv\", False, \"Splee\"),\n    \"Splee\": Event(\"Splee\", False, \"Blen\"),\n    \"Blen\": Event(\"Blen\", False, \"Druk\"),\n    \"Druk\": Event(\"Druk\", \"Blen\", \"Plog\"),\n    \"Plog\": Event(\"Plog\", \"Druk\", \"Skrim\"),\n    \"Skrim\": Event(\"Skrim\", \"Plog\", \"Zimb\"),\n    \"Zimb\": Event(\"Zimb\", \"Skrim\", \"Wrox\")\n}\n\ndef simulate(event_name, state=None):\n    event = events[event_name]\n    if state is None:\n        state = {}\n\n    if event.name in state:\n        return state\n\n    if event.causes_not:\n        for cause in event.causes_not:\n            if cause in state:\n                state[cause] = not state[cause]\n\n    event.occurred = True\n    state[event.name] = True\n\n    for cause in event.caused_by:\n        simulate(cause, state)\n\n    return state\n\ndef check_wrox(state):\n    return \"Wrox\" in state\n\ndef not_nuv_and_not_plog(state):\n    state[\"Nuv\"] = False\n    state[\"Plog\"] = False\n    return state\n\nstate = not_nuv_and_not_plog({\"Nuv\": True, \"Plog\": True})\nresult = simulate(\"Splee\", state)\nanswer = \"Wrox would occur\" if check_wrox(result) else \"Wrox would not occur\"\nprint(answer)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "154",
+        "question": "Assume not Ziklo, and based on this assumption, further suppose not Sline. Would Lumbo occur?",
+        "given_info": "We know that Ziklo causes Blaf, Blaf and Ziklo together cause Trune, Trune and Blaf together cause Vork, Vork causes Sline, Sline and Vork together cause Frim, Frim causes Qado, and Qado causes Lumbo.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_0",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 770,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Relationship:\n    def __init__(self, cause, effect):\n        self.cause = cause\n        self.effect = effect\n\nclass Chain:\n    def __init__(self, relationships):\n        self.relationships = relationships\n\n    def simulate(self, initial_state):\n        state = initial_state.copy()\n        for relationship in self.relationships:\n            if state[relationship.cause]:\n                state[relationship.effect] = True\n        return state\n\ngiven_info = [\n    Relationship('Ziklo', 'Blaf'),\n    Relationship('Blaf', 'Trune'),\n    Relationship('Trune', 'Vork'),\n    Relationship('Vork', 'Sline'),\n    Relationship('Sline', 'Frim'),\n    Relationship('Frim', 'Qado'),\n    Relationship('Qado', 'Lumbo')\n]\n\nchain = Chain(given_info)\n\ninitial_state = {'Ziklo': False, 'Blaf': False, 'Trune': False, 'Vork': False, 'Sline': False, 'Frim': False, 'Qado': False, 'Lumbo': False}\n\nnot_ziklo_state = initial_state.copy()\nnot_ziklo_state['Ziklo'] = False\nnot_sline_state = chain.simulate(not_ziklo_state)\nnot_sline_state['Sline'] = False\n\nfinal_state = chain.simulate(not_sline_state)\n\nif 'Lumbo' in final_state:\n    print(\"Lumbo would occur\")\nelse:\n    print(\"Lumbo would not occur\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "354",
+        "question": "Assume not Glent, and based on this assumption, further suppose not Melf. Would Zlim occur?",
+        "given_info": "We know that Glent causes Razz, Razz and Glent together cause Pex, Pex and Razz together cause Zurn, Zurn causes Melf, Melf and Zurn together cause Crip, Crip causes Flen, and Flen causes Zlim.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_1",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 771,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None, caused_by=None):\n        self.name = name\n        self.causes = set(causes) if causes else set()\n        self.caused_by = set(caused_by) if caused_by else set()\n\n    def __repr__(self):\n        return self.name\n\nevents = {\n    'Glent': { 'Razz' },\n    'Razz': { 'Glent', 'Pex' },\n    'Pex': { 'Razz', 'Zurn' },\n    'Zurn': { 'Pex', 'Razz', 'Melf', 'Crip' },\n    'Crip': { 'Zurn', 'Flen' },\n    'Flen': { 'Crip', 'Zlim' },\n    'Zlim': { 'Flen' }\n}\n\ndef simulate(events, sequence):\n    current_state = set()\n    for event in sequence:\n        if event in current_state:\n            continue\n        if event in events:\n            current_state.update(events[event].union(current_state))\n        else:\n            return False\n    return event in current_state\n\ndef counterfactual(events, sequence_a, sequence_b):\n    return not simulate(events, sequence_a) and not simulate(events, sequence_a.union(sequence_b))\n\nevents = {name: Event(name, **event) for name, event in events.items()}\nsequence_a = {'Glent'}\nsequence_b = {'Melf'}\nsequence_c = sequence_a.union(sequence_b)\n\nif counterfactual(events, sequence_a, sequence_b):\n    print(\"Zlim would not occur\")\nelse:\n    print(\"Zlim would occur\")",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "554",
+        "question": "Assume not Praf, and based on this assumption, further suppose not Yobb. Would Klep occur?",
+        "given_info": "We know that Praf causes Vank, Vank and Praf together cause Scud, Scud and Vank together cause Wrenk, Wrenk causes Yobb, Yobb and Wrenk together cause Glim, Glim causes Spog, and Spog causes Klep.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_2",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 772,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Cause:\n    def __init__(self, effect, causes):\n        self.effect = effect\n        self.causes = causes\n\ndef simulate(given_info, scenario):\n    events = set()\n    for event in scenario:\n        events.add(event)\n\n    for cause in given_info:\n        if all(event in events for event in cause.causes) and cause.effect not in events:\n            events.add(cause.effect)\n\n    return cause.effect in events\n\ngiven_info = [\n    Cause(\"Praf\", [\"Vank\"]),\n    Cause(\"Vank\", [\"Scud\"]),\n    Cause(\"Scud\", [\"Wrenk\"]),\n    Cause(\"Wrenk\", [\"Yobb\"]),\n    Cause(\"Yobb\", [\"Glim\"]),\n    Cause(\"Glim\", [\"Spog\"]),\n    Cause(\"Spog\", [\"Klep\"])\n]\n\nscenario = [\"not Praf\", \"not Yobb\"]\n\nresult = simulate(given_info, scenario)\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "754",
+        "question": "Assume not Fizo, and based on this assumption, further suppose not Skul. Would Jext occur?",
+        "given_info": "We know that Fizo causes Blorn, Blorn and Fizo together cause Plim, Plim and Blorn together cause Quaz, Quaz causes Skul, Skul and Quaz together cause Triv, Triv causes Yex, and Yex causes Jext.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_3",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 773,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes=None, caused_by=None):\n        self.name = name\n        self.causes = causes if causes else []\n        self.caused_by = caused_by if caused_by else []\n\nFizo = Event(\"Fizo\")\nBlorn = Event(\"Blorn\", causes=[Fizo])\nPlim = Event(\"Plim\", causes=[Blorn, Blorn])\nQuaz = Event(\"Quaz\", causes=[Plim, Blorn])\nSkul = Event(\"Skul\", causes=[Quaz, Quaz])\nTriv = Event(\"Triv\", causes=[Skul, Quaz])\nYex = Event(\"Yex\", causes=[Triv])\nJext = Event(\"Jext\", causes=[Yex])\n\ndef simulate(events, assumptions):\n    simulated_events = events.copy()\n    for event in assumptions:\n        simulated_events[event.name].caused_by = []\n\n    for event in simulated_events:\n        if not event.name in assumptions and event.caused_by:\n            for cause in event.caused_by:\n                if cause.name not in assumptions:\n                    event.caused_by.remove(cause)\n\n    for event in simulated_events:\n        if event.name == \"Jext\" and not event.caused_by:\n            return False\n\n    return True\n\nassumptions = [Fizo, Skul]\nresult = simulate([Fizo, Blorn, Plim, Quaz, Skul, Triv, Yex, Jext], assumptions)\nprint(result)",
+        "text_path_prediction": "no"
+    },
+    {
+        "question_id": "954",
+        "question": "Assume not Nuv, and based on this assumption, further suppose not Plog. Would Wrox occur?",
+        "given_info": "We know that Nuv causes Splee, Splee and Nuv together cause Blen, Blen and Splee together cause Druk, Druk causes Plog, Plog and Druk together cause Skrim, Skrim causes Zimb, and Zimb causes Wrox.",
+        "true_answer": "no",
+        "type": "nested",
+        "meta": {
+            "story_id": "nonsense_4",
+            "rung": 3,
+            "query_type": "det-counterfactual",
+            "model_id": 774,
+            "graph_id": "graph8"
+        },
+        "code_path_prediction": "no",
+        "generated_code_representation": "class Event:\n    def __init__(self, name, causes):\n        self.name = name\n        self.causes = set(causes)\n        self.occurred = False\n\nNuv = Event(\"Nuv\", set())\nSplee = Event(\"Splee\", {Nuv})\nBlen = Event(\"Blen\", {Splee, Nuv})\nDruk = Event(\"Druk\", {Splee, Blen})\nPlog = Event(\"Plog\", {Druk})\nSkrim = Event(\"Skrim\", {Druk, Plog})\nZimb = Event(\"Zimb\", {Skrim})\nWrox = Event(\"Wrox\", {Zimb})\n\ndef simulate(events):\n    for event in events:\n        if not event.occurred and event.causes:\n            for cause in event.causes:\n                if not cause.occurred:\n                    continue\n            event.occurred = True\n            for effect in event.causes | {event}:\n                simulate([effect])\n\ndef ask(assumptions):\n    for event in assumptions:\n        event.occurred = False\n    simulate([Nuv, Druk])\n    return not Wrox.occurred\n\nprint(ask([Nuv, Plog]))",
+        "text_path_prediction": "no"
+    }
+]
